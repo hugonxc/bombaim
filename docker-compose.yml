@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  backend_app:
+    build:
+      context: ./
+      dockerfile: backend.Dockerfile
+    working_dir: /code
+    command: flask run
+    environment:
+      FLASK_ENV: development
+    volumes:
+      - ./backend:/code    
+    ports:
+      - 5000:5000
+
+  # frontend_app:
+  #   build: ./fronted.Dockerfile
+  #   command: ping 127.0.0.1
+  #   volumes:
+  #     - ./frontend:/app
