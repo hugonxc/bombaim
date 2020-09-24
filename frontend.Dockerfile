@@ -1,4 +1,9 @@
-FROM node/latest
+FROM node:latest
 
-RUN mkdir /app
+RUN mkdir /code
+COPY ./frontend /code
+
+WORKDIR /code
+RUN npm install
+
 
