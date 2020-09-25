@@ -1,13 +1,15 @@
-import os
+import os, sys
 from flask import Flask, flash, request, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 
-from mma.MMA import midi
 from mma.MMA import gbl
+from mma.MMA import parse
+from mma.MMA import midi
 from mma.MMA import tempo
 from mma.MMA import auto
 from mma.MMA import paths
-from mma.MMA import parse
+from mma.MMA import grooves
+
 
 UPLOAD_FOLDER = './songs/'
 ALLOWED_EXTENSIONS = {'mma'}
@@ -16,6 +18,9 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def generate_midi(f):
+    # Clear global variables
+    gbl.__init__()
+
     # Set paths for the libs
     paths.init()
 
@@ -38,7 +43,23 @@ def generate_midi(f):
     # Create the midi file
     paths.createOutfileName(".mid")
     out_filename = paths.outfile
-    print("OUT", out_filename)
+
+    for n in gbl.tnames.values():
+        if n.channel:
+            n.clearPending()
+            n.doMidiClear()
+            n.doChannelReset()
+            if n.riff:
+                warning("%s has pending Riff(s)" % n.name)
+
+    trackCount = 1    # account for meta track
+
+    for n in sorted(gbl.mtrks.keys())[1:]:     # check all but 0 (meta)
+        if len(gbl.mtrks[n].miditrk) > 1:
+            trackCount += 1
+
+    gbl.mtrks[0].addText(0, "DURATION: %d" % (gbl.totTime*60) )
+
     try:
         out = open(out_filename, 'wb')
         midi.writeTracks(out)
@@ -46,13 +67,9 @@ def generate_midi(f):
     except IOError:
         print("ERROR")
 
+    grooves.grooveClear([])
+
     return out_filename
-
-
-    # file.locFile(gbl.infile, None)
-    # paths.createOutfileName(".mid")
-    # paths.dommaStart()
-
 
 
 def allowed_file(filename):
@@ -62,6 +79,11 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        # Clean folder before new upload
+        for old_f in os.listdir(app.config['UPLOAD_FOLDER']):
+            path = os.path.join(app.config['UPLOAD_FOLDER'], old_f)
+            os.system("rm -f "+ path)
+
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -75,6 +97,7 @@ def upload_file():
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             midi_filename = generate_midi(f)
             return send_file(midi_filename, as_attachment=True)
     return '''
