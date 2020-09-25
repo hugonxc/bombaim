@@ -8,3 +8,4 @@ node_modules/
 
 # Frontend dist
 frontend/dist/
+frontend/.cache/
