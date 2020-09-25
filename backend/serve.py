@@ -1,5 +1,6 @@
 import os, sys
 from flask import Flask, flash, request, redirect, url_for, send_file
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
 from mma.MMA import gbl
@@ -16,6 +17,8 @@ ALLOWED_EXTENSIONS = {'mma'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def generate_midi(f):
     # Clear global variables

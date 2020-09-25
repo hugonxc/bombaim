@@ -2,15 +2,25 @@
 var webaudiofont = require('webaudiofont');
 
 function fileUpload(event){
-    var file = event.target.files[0];
-    var fileReader = new FileReader();
-    fileReader.onload = function (progressEvent) {
-        var arrayBuffer = progressEvent.target.result;
-        var midiFile = new MIDIFile(arrayBuffer);
-        var song = midiFile.parseSong();
-        startLoad(song);
-    };
-    fileReader.readAsArrayBuffer(file);
+    const data = new FormData();
+    data.append('file', event.target.files[0])
+    
+    fetch('http://localhost:5000/', {
+        mode: 'cors',
+        method: 'POST',
+        body: data
+    })
+    .then(response => response.blob())
+    .then(function(r_blob){
+        var fileReader = new FileReader();
+        fileReader.onload = function (progressEvent) {
+            var arrayBuffer = progressEvent.target.result;
+            var midiFile = new MIDIFile(arrayBuffer);
+            var song = midiFile.parseSong();
+            startLoad(song);
+        };
+        fileReader.readAsArrayBuffer(r_blob);
+    })
 }
 
 function startLoad(song) {
