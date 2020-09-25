@@ -5,3 +5,6 @@ __pycache__/
 
 # Node
 node_modules/
+
+# Frontend dist
+frontend/dist/

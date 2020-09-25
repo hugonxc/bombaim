@@ -18,9 +18,15 @@ services:
     build:
       context: ./
       dockerfile: frontend.Dockerfile
-    working_dir: /code
+    working_dir: /code/app
     command: npm start
     volumes:
-      - ./frontend:/app
+      - ./frontend:/code/app:delegated
+      - ./frontend/package.json:/code/package.json
+      - ./frontend/package-lock.json:/code/package-lock.json
+      - notused:/code/app/node_modules
     ports:
       - 1234:1234
+
+volumes:
+  notused:
