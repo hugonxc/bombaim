@@ -10,16 +10,11 @@ function fileUpload(event){
         method: 'POST',
         body: data
     })
-    .then(response => response.blob())
-    .then(function(r_blob){
-        var fileReader = new FileReader();
-        fileReader.onload = function (progressEvent) {
-            var arrayBuffer = progressEvent.target.result;
-            var midiFile = new MIDIFile(arrayBuffer);
-            var song = midiFile.parseSong();
-            startLoad(song);
-        };
-        fileReader.readAsArrayBuffer(r_blob);
+    .then(response => response.arrayBuffer())
+    .then(function(r_buff){
+        var midiFile = new MIDIFile(r_buff);
+        var song = midiFile.parseSong();
+        startLoad(song);
     })
 }
 
