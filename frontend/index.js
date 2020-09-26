@@ -1,22 +1,50 @@
 // Midi player
 var webaudiofont = require('webaudiofont');
 
-function fileUpload(event){
+function fileUpload(url, f){
     const data = new FormData();
-    data.append('file', event.target.files[0])
+    data.append('file', f)
     
-    fetch('http://localhost:5000/', {
+    return fetch(url, {
         mode: 'cors',
         method: 'POST',
         body: data
     })
-    .then(response => response.arrayBuffer())
-    .then(function(r_buff){
-        var midiFile = new MIDIFile(r_buff);
-        var song = midiFile.parseSong();
-        startLoad(song);
-    })
+
 }
+
+
+function songUpload(event){
+    var url  = 'http://localhost:5000/song';
+    var f = event.target.files[0];
+    var song = fileUpload(url, f);
+
+    song.then(response => response.arrayBuffer())
+        .then(function(buff){
+            console.log(buff);
+            var midiFile = new MIDIFile(buff);
+            var song = midiFile.parseSong();
+            startLoad(song);
+        })
+        .catch((error) => {
+                alert("Something went wrong while parsing this file");
+                location.reload()
+        });
+}
+
+function grooveUpload(event){
+    var url  = 'http://localhost:5000/groove';
+    var f = event.target.files[0];
+    var song = fileUpload(url, f);
+
+    song.then(response => response.json())
+        .then(function(json){
+            alert("Groove: " + json['name'] + "\n" + 
+                  "Status: " + json['status']);
+            location.reload()
+        })
+}
+
 
 function startLoad(song) {
     var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
@@ -123,8 +151,10 @@ var root = document.body
 var Hello = {
     view: function() {
         return m("main", [
-            m("h1", {class: "title"}, "Sample test"),
-            m("input.input[type=file]", {onchange: fileUpload}),
+            m("h1", {class: "title"}, "Groove upload"),
+            m("input.input[type=file]", {id: "groove-upload", onchange: grooveUpload}),
+            m("h1", {class: "title"}, "Song upload"),
+            m("input.input[type=file]", {id: "song-upload", onchange: songUpload}),
             m("button", {onclick: startPlay}, "Play")
         ])
     }

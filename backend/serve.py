@@ -1,5 +1,5 @@
 import os, sys
-from flask import Flask, flash, request, redirect, url_for, send_file
+from flask import Flask, flash, request, redirect, url_for, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
@@ -10,6 +10,7 @@ from mma.MMA import tempo
 from mma.MMA import auto
 from mma.MMA import paths
 from mma.MMA import grooves
+from mma.MMA import userGroove
 
 
 UPLOAD_FOLDER = './songs/'
@@ -19,6 +20,32 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_file(request):
+    if request.method == 'POST':
+        # Clean folder before new upload
+        for old_f in os.listdir(app.config['UPLOAD_FOLDER']):
+            path = os.path.join(app.config['UPLOAD_FOLDER'], old_f)
+            os.system("rm -f "+ path)
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        f = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if f.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return f
 
 def generate_midi(f):
     # Clear global variables
@@ -40,7 +67,11 @@ def generate_midi(f):
 
     # Parse MMA file
     paths.dommaStart()
-    parse.parseFile(filename)
+    try:
+        parse.parseFile(filename)
+    except SystemExit:
+        print("Error on parse", flush=True)
+        return None
     paths.dommaEnd() 
 
     # Create the midi file
@@ -74,41 +105,44 @@ def generate_midi(f):
 
     return out_filename
 
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # Clean folder before new upload
-        for old_f in os.listdir(app.config['UPLOAD_FOLDER']):
-            path = os.path.join(app.config['UPLOAD_FOLDER'], old_f)
-            os.system("rm -f "+ path)
-
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        f = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if f.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if f and allowed_file(f.filename):
-            filename = secure_filename(f.filename)
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            midi_filename = generate_midi(f)
+@app.route('/song', methods=['POST'])
+def upload_song():
+    f = upload_file(request)
+    if f:
+        midi_filename = generate_midi(f)
+        if midi_filename:
             return send_file(midi_filename, as_attachment=True)
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+        else:
+            return {"error": "Something went wrong parse, please report this issue"}
+    return None
+
+
+def add_groove(f):
+    # Clear global variables
+    gbl.__init__()
+
+    # Set paths for the libs
+    paths.init()
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
+    gbl.makeGrvDefs = userGroove.update_grooves(file_path)
+
+    try:
+        auto.libUpdate()
+    except SystemExit:
+        print("ignoring SystemExit", flush=True)
+    
+    grooves.grooveClear([])
+    
+    return {
+        "name": f.filename,
+        "status": "available"
+    }
+
+@app.route('/groove', methods=['POST'])
+def upload_groove():
+    f = upload_file(request)
+    if f:
+        groove_info = add_groove(f)
+        return jsonify(**groove_info)
+    return None
