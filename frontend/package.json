@@ -14,5 +14,8 @@
     "mithril": "^2.0.4",
     "parcel": "^1.12.4",
     "webaudiofont": "^2.5.53"
+  },
+  "devDependencies": {
+    "node-forge": "^0.10.0"
   }
 }
