@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, json
 from flask import Flask, flash, request, redirect, url_for, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
@@ -37,6 +37,7 @@ def upload_file(request):
             flash('No file part')
             return redirect(request.url)
         f = request.files['file']
+        print("QWER", f)
         # if user does not select file, browser also
         # submit an empty part without filename
         if f.filename == '':
@@ -45,9 +46,9 @@ def upload_file(request):
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return f
+            return f.filename
 
-def generate_midi(f):
+def generate_midi(f_filename):
     # Clear global variables
     gbl.__init__()
 
@@ -55,7 +56,7 @@ def generate_midi(f):
     paths.init()
 
     # Get the filename of the uploaded file
-    filename = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
+    filename = os.path.join(app.config['UPLOAD_FOLDER'], f_filename)
     gbl.infile = filename
 
     # Create first elements for midi file
@@ -146,3 +147,30 @@ def upload_groove():
         groove_info = add_groove(f)
         return jsonify(**groove_info)
     return None
+
+
+@app.route('/test', methods=['POST'])
+def test():
+    print("Here", request.is_json)
+    if request.is_json:
+        data = request.get_json()
+        tempo = data["Tempo"]
+        groove = data["Groove"]
+        chords = data["Chords"]
+        with open("songs/song.mma", "w") as outfile:
+            outfile.write("Tempo "+ tempo + "\n")
+            outfile.write("Groove "+ groove + "\n")
+            n = 1
+            for chord in chords:
+                outfile.write(str(n) + " "+ chord + "\n")
+                n +=1
+        outfile.close()
+        
+        if outfile:
+            midi_filename = generate_midi("song.mma")
+            if midi_filename:
+                return send_file(midi_filename, as_attachment=True)
+            else:
+                return {"error": "Something went wrong parse, please report this issue"}
+        return None
+    return jsonify(data)

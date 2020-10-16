@@ -45,6 +45,48 @@ function grooveUpload(event){
         })
 }
 
+function test(event){
+    event.preventDefault();
+    var url  = 'http://localhost:5000/test';
+
+    let myForm = document.getElementById('form');
+    let formData = new FormData(myForm);
+
+    var chords = []
+    var opts = document.querySelectorAll("#chords option:checked");
+    for (const opt of opts) {
+        chords.push(opt.value)
+    }
+
+    var object = {};
+    formData.forEach(function(value, key){
+        object[key] = value;
+    });
+
+    object["Chords"] = chords
+    var data = JSON.stringify(object);
+    console.log(data);
+
+
+    fetch(url, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        method: 'POST',
+        body: data
+    }).then(response => response.arrayBuffer())
+    .then(function(buff){
+        console.log(buff);
+        var midiFile = new MIDIFile(buff);
+        var song = midiFile.parseSong();
+        startLoad(song);
+    })
+    .catch((error) => {
+            alert("Something went wrong while parsing this file");
+            location.reload()
+    });
+}
 
 function startLoad(song) {
     var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
@@ -155,7 +197,25 @@ var Hello = {
             m("input.input[type=file]", {id: "groove-upload", onchange: grooveUpload}),
             m("h1", {class: "title"}, "Song upload"),
             m("input.input[type=file]", {id: "song-upload", onchange: songUpload}),
-            m("button", {onclick: startPlay}, "Play")
+            m("button", {onclick: startPlay}, "Play"),
+            
+            m("div", [
+                m("form", {id: "form"}, [
+                    m("label.label", "Tempo"),
+                    m("input.input[type=text][placeholder=Tempo][name=Tempo]"),
+                    m("label.label", "Groove"),
+                    m("input.input[placeholder=Groove][name=Groove]"),
+                    m("label.label", "Chords",),
+                    m("select[name=Chords][multiple=True]", {id: "chords"},[
+                        m('option', { value: "C" }, "C"),
+                        m('option', { value: "D" }, "D"),
+                        m('option', { value: "E" }, "E"),
+                        m('option', { value: "F" }, "F"),
+                        m('option', { value: "G" }, "G"),
+                    ]),
+                    m("button", {onclick: test}, "SEND"),
+                ]),
+            ]),
         ])
     }
 }
