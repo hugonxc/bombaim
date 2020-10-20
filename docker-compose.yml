@@ -10,7 +10,8 @@ services:
     environment:
       FLASK_ENV: development
     volumes:
-      - ./backend:/code    
+      - ./backend:/code
+      - notused:/code/songs
     ports:
       - 5000:5000
 
