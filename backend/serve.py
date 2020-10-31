@@ -151,19 +151,22 @@ def upload_groove():
 
 @app.route('/test', methods=['POST'])
 def test():
-    print("Here", request.is_json)
+    # TEMPFILE
+    # TemporaryFile
     if request.is_json:
         data = request.get_json()
-        tempo = data["Tempo"]
-        groove = data["Groove"]
-        chords = data["Chords"]
+        tempo = data["tempo"]
+        groove = data["groove"]
         with open("songs/song.mma", "w") as outfile:
             outfile.write("Tempo "+ tempo + "\n")
-            outfile.write("Groove "+ groove + "\n")
-            n = 1
-            for chord in chords:
-                outfile.write(str(n) + " "+ chord + "\n")
-                n +=1
+            outfile.write("Groove "+ groove)
+
+            # Unpack measures
+            for measure in data["measures"]:
+                outfile.write("\n" + str(measure) + " ")
+                for chord in data["measures"][measure]:
+                    outfile.write(chord + " ")
+
         outfile.close()
         
         if outfile:

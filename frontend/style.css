@@ -1,0 +1,16 @@
+form input{
+    display: block;
+}
+
+form #btns > button{
+    margin: 10px;
+}
+
+#chords label{
+    display: block;
+}
+
+#chords .chords{
+    display: inline;
+    margin: 10px;
+}
