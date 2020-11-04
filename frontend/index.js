@@ -2,9 +2,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import Header from "./components/header/Header"
-import { Player } from "./components/player/Player"
-import ChordChart from "./components/chord_chart/ChordChart"
 import Groove from "./components/groove/Groove"
+import Player from "./components/player/Player"
+import ChordChart from "./components/chord_chart/ChordChart"
 
 let root = document.getElementById("root");
 

@@ -2,7 +2,7 @@ import React from "react"
 import WebAudioFontPlayer from 'webaudiofont'
 
 
-function loadMidi(buff){
+export function loadMidi(buff){
     let s = this.state.song
     s.loadedsong = true
     this.setState({
@@ -146,4 +146,4 @@ class Player extends React.Component {
     }
 }
 
-export { Player, loadMidi }
+export default Player
