@@ -19,7 +19,7 @@ class ChordChart extends React.Component {
     
     sendChords = (event) => {
         event.preventDefault();
-        var url  = 'http://localhost:5000/test';
+        var url  = 'http://localhost:5000/song';
 
         var data = JSON.stringify(this.state);
         console.log("D", data);

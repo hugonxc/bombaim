@@ -1,7 +1,6 @@
 FROM python:3
 
 RUN mkdir /code
-RUN mkdir /code/songs
 COPY ./backend /code
 
 WORKDIR /code
