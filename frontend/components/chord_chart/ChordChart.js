@@ -31,7 +31,7 @@ class ChordChart extends React.Component {
         this.state = {
             opts: [],
             chart: {
-                tempo: '',
+                tempo: "80",
                 groove: '',
                 measures: {
                     1: [],
@@ -122,12 +122,17 @@ class ChordChart extends React.Component {
             <div>
                 <h1>Chord Chart</h1>
                 <form>
-                    Tempo: <input type="text" name="tempo" onChange={this.inputHandler} ></input>
+                    Tempo: 
+                    <input type="range"name="tempo" min="20" max="400" onChange={this.inputHandler}></input>
+                    {this.state.chart.tempo}
+
+                    <br/><br/>
                     Groove: 
                     <select name="groove" onChange={this.inputHandler}>
                         {this.state.opts}
                     </select>
-                    
+
+                    <br/><br/>
                     Chords sequence: <br/>
                     {Object.keys(this.state.chart.measures).map((id, key) => (
                         <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
