@@ -2,26 +2,49 @@ import React from "react"
 import { loadMidi } from "../../components/player/Player"
 import Measure from "./Measure";
 
+let key = 0;
+
+function opt(label, grooves){
+    let opts = []
+
+    for (const g of grooves) {
+        key = key + 1;
+        opts.push(<option value={g} key={key}>{g}</option>)
+        
+    }
+
+    key = key + 1;
+    return(
+        <optgroup label={label} key={key}>
+            {opts}
+        </optgroup>  
+
+    )
+}
+
+
 
 class ChordChart extends React.Component {
     constructor(props){
         super(props);
-
+        
         this.state = {
-            tempo: '',
-            groove: '',
-            measures: {
-                1: [],
+            opts: [],
+            chart: {
+                tempo: '',
+                groove: '',
+                measures: {
+                    1: [],
+                }
             }
         }
     }
-    
     
     sendChords = (event) => {
         event.preventDefault();
         var url  = 'http://localhost:5000/song';
 
-        var data = JSON.stringify(this.state);
+        var data = JSON.stringify(this.state.chart);
         console.log("D", data);
     
         fetch(url, {
@@ -44,22 +67,55 @@ class ChordChart extends React.Component {
     inputHandler = (event) => {
         let name = event.target.name;
         let value = event.target.value;
-        this.setState({[name]: value});
+        let chart = this.state.chart;
+        chart[name] = value;
+        this.setState({chart: chart});
     }
 
     addMeasures = (event) => {
         event.preventDefault();
-        let measures = this.state.measures;
-        let len = Object.keys(measures).length;
-        measures[len+1] = [];
-        this.setState({measures: measures})
+        let chart = this.state.chart;
+        let len = Object.keys(chart.measures).length;
+        chart.measures[len+1] = [];
+        this.setState({chart: chart})
     }
 
     onChangeMeasure = (id, chords) => {
-        let measures = this.state.measures;
-        measures[id] = chords;
-        this.setState({measures: measures})
+        let chart = this.state.chart;
+        chart.measures[id] = chords;
+        this.setState({chart: chart})
     }
+
+    // Get available grooves
+    getGrooves = () => {
+        var url  = 'http://localhost:5000/list_grooves';
+
+        fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+        }).then(response => response.json())
+        .then(
+            (response) => {
+                this.mountGrooves(response);
+            }
+        )
+        .catch((error) => {
+                alert("Error retrieving grooves");
+        });
+    }
+
+    mountGrooves = (grooves) => {
+        let gs = []
+        for (const key in grooves) {
+            gs.push(opt(key, grooves[key]))
+        }
+        this.setState({opts: gs})
+    }
+
+    componentDidMount(){
+        this.getGrooves();
+    }
+
 
     render(){
         return(
@@ -67,10 +123,13 @@ class ChordChart extends React.Component {
                 <h1>Chord Chart</h1>
                 <form>
                     Tempo: <input type="text" name="tempo" onChange={this.inputHandler} ></input>
-                    Groove: <input type="text" name="groove" onChange={this.inputHandler}></input>
+                    Groove: 
+                    <select name="groove" onChange={this.inputHandler}>
+                        {this.state.opts}
+                    </select>
                     
                     Chords sequence: <br/>
-                    {Object.keys(this.state.measures).map((id, key) => (
+                    {Object.keys(this.state.chart.measures).map((id, key) => (
                         <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
                     ))}
 

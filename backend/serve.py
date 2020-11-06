@@ -148,3 +148,35 @@ def song():
             else:
                 return {"error": "Something went wrong parse, please report this issue"}
         return None
+
+
+
+from mma.MMA.auto import loadDB
+
+@app.route('/list_grooves', methods=['GET'])
+def list_grooves():
+    # Clear global variables
+    gbl.__init__()
+    # Set paths for the libs
+    paths.init()
+
+    # Needed import for global variable libDirs after paths.init() method ran
+    from mma.MMA.paths import libDirs
+
+    grooves = {}
+    for lib in libDirs:
+        g = loadDB(lib)
+        if g:
+            for g_path in g:
+                name = g_path.split("/")[-1].split(".")[0]
+                gs = g[g_path]
+
+                if name in grooves:
+                    og = grooves[name]
+                    gs = og + gs
+
+                grooves.update({
+                        name: gs
+                    })
+
+    return jsonify(grooves)
