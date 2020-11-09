@@ -2,6 +2,9 @@ import React from "react"
 import { loadMidi } from "../../components/player/Player"
 import Measure from "./Measure";
 
+// Material UI
+import { Button } from '@material-ui/core';
+
 let key = 0;
 
 function opt(label, grooves){
@@ -139,7 +142,10 @@ class ChordChart extends React.Component {
                     ))}
 
                     <button onClick={this.addMeasures}>+</button>
-                    <button onClick={this.sendChords}>Save</button>
+                    <Button variant="contained" color="primary" onClick={this.sendChords}>
+                        Save
+                    </Button>
+
                 </form>
             </div>
 

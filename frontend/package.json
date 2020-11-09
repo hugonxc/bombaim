@@ -11,10 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "mithril": "^2.0.4",
     "parcel": "^1.12.4",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "webaudiofont": "^2.5.53"
   },
   "devDependencies": {
