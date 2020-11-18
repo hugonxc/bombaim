@@ -16,6 +16,7 @@
     "parcel": "^1.12.4",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
+    "react-icons": "^3.11.0",
     "webaudiofont": "^2.5.53"
   },
   "devDependencies": {

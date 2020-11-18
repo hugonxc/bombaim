@@ -1,6 +1,12 @@
 import React from "react"
 import WebAudioFontPlayer from 'webaudiofont'
 
+// Material
+import { Grid, Box } from '@material-ui/core';
+
+// Icons
+import { RiPlayLine, RiRepeat2Line, RiPauseLine, RiSkipBackLine, RiDownload2Line, RiEqualizerFill  } from 'react-icons/ri';
+
 
 export function loadMidi(buff){
     let s = this.state.song
@@ -134,13 +140,41 @@ class Player extends React.Component {
 
     render(){
         return(
-            <div>
-                <h1>Player</h1>
-                {
-                    this.state.song.loadedsong == true &&
-                    <button onClick={this.startPlay}>Play</button>                    
-                }
-            </div>
+            <Box bgcolor="#969FAA">
+                <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                >
+                    <Grid>
+                        <RiSkipBackLine size="2em" color="white"/>
+                    {
+                //         this.state.song.loadedsong == true &&
+                //         <button onClick={this.startPlay}>Play</button>                    
+                 }
+
+                        <RiPlayLine size="2em" color="white"/>
+                        <RiPauseLine size="2em" color="white"/>
+                        <RiRepeat2Line size="2em" color="white"/>
+                    </Grid>
+
+                    <Grid >
+                        0:00 / 00:00
+                        X BPM
+                    </Grid>
+
+                    <Grid>
+                        <RiEqualizerFill size="2em" color="white"/>
+                        <RiDownload2Line size="2em" color="white"/>
+                    </Grid>
+
+                </Grid>
+            </Box>
+
+            // <div>
+            //     <h1>Player</h1>
+            // </div>
 
         )
     }
