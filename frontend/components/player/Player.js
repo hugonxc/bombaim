@@ -1,6 +1,8 @@
 import React from "react"
 import WebAudioFontPlayer from 'webaudiofont'
 
+import "./Player.css"
+
 // Material
 import { Grid, Box } from '@material-ui/core';
 
@@ -140,7 +142,7 @@ class Player extends React.Component {
 
     render(){
         return(
-            <Box bgcolor="#969FAA">
+            <Box className="player">
                 <Grid
                     container
                     direction="row"
@@ -148,24 +150,24 @@ class Player extends React.Component {
                     alignItems="center"
                 >
                     <Grid>
-                        <RiSkipBackLine size="2em" color="white"/>
+                        <RiSkipBackLine size="2.2em" color="white"/>
                     {
                 //         this.state.song.loadedsong == true &&
                 //         <button onClick={this.startPlay}>Play</button>                    
                  }
 
-                        <RiPlayLine size="2em" color="white"/>
-                        <RiPauseLine size="2em" color="white"/>
-                        <RiRepeat2Line size="2em" color="white"/>
+                        <RiPlayLine size="2.2em" color="white" className="player-i"/>
+                        <RiPauseLine size="2.2em" color="white" className="player-i"/>
+                        <RiRepeat2Line size="2.2em" color="white" className="player-i"/>
                     </Grid>
 
-                    <Grid >
+                    <Grid className="player-time">
                         0:00 / 00:00
                     </Grid>
 
                     <Grid>
-                        <RiEqualizerFill size="2em" color="white"/>
-                        <RiDownload2Line size="2em" color="white"/>
+                        <RiEqualizerFill size="2.2em" color="white" className="player-i-ctrls"/>
+                        <RiDownload2Line size="2.2em" color="white"/>
                     </Grid>
 
                 </Grid>

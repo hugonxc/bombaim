@@ -1,0 +1,18 @@
+.player {
+    background-color: #969FAA;
+    padding: 10px 50px 10px 50px;
+}
+
+.player-i {
+    margin-left: 10px;
+}
+
+.player-i-ctrls {
+    margin-right: 35px;
+}
+
+.player-time {
+    color: white;
+    font-size: 2em;
+    font-weight: 500;
+}
