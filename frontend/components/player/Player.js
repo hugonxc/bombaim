@@ -141,6 +141,11 @@ class Player extends React.Component {
     }
 
     render(){
+        let playerTime = "00:00";
+        if(this.state.song.song != null){
+            playerTime = this.state.song.currentSongTime + " / " + this.state.song.song.duration
+        }
+
         return(
             <Box className="player">
                 <Grid
@@ -150,24 +155,19 @@ class Player extends React.Component {
                     alignItems="center"
                 >
                     <Grid>
-                        <RiSkipBackLine size="2.2em" color="white"/>
-                    {
-                //         this.state.song.loadedsong == true &&
-                //         <button onClick={this.startPlay}>Play</button>                    
-                 }
-
-                        <RiPlayLine size="2.2em" color="white" className="player-i"/>
+                        <RiSkipBackLine size="2.2em" color="white" className="player-i"/>
+                        <RiPlayLine size="2.2em" color="white" className="player-i" onClick={this.startPlay}/>
                         <RiPauseLine size="2.2em" color="white" className="player-i"/>
                         <RiRepeat2Line size="2.2em" color="white" className="player-i"/>
                     </Grid>
 
                     <Grid className="player-time">
-                        0:00 / 00:00
+                        {playerTime}
                     </Grid>
 
                     <Grid>
                         <RiEqualizerFill size="2.2em" color="white" className="player-i-ctrls"/>
-                        <RiDownload2Line size="2.2em" color="white"/>
+                        <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
                     </Grid>
 
                 </Grid>
