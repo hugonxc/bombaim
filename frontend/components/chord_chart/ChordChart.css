@@ -1,0 +1,58 @@
+.chart {
+    padding: 20px 50px 0px 50px;
+
+}
+
+.chart-name {
+    font-size: 3em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+#send-chords-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 90%;
+    z-index: 999999;
+    background-color: #FF9052;
+}
+
+.add-measures {
+    height: 200px;
+    width: 370px;
+    border-left: 5px solid #969FAA;
+    text-align: center;
+}
+
+#add-measures-btn {
+    background-color: #FF9052;
+    position: relative;
+    top: 35%;
+}
+.add-measures:hover {
+    background-color: rgba(215, 221, 228, 0.93);
+}
+
+/* Measure */
+
+.measure {
+    height: 200px;
+    background-color: transparent;
+    display: inline-flex;
+    border-left: 5px solid #969FAA;
+    margin: 20px 0px 20px 0px;
+}
+
+.measure > input {
+    background-color: transparent;
+    font-size: 4em;
+    width: 370px;
+    text-align: center;
+    border: 0px;
+}
+
+.measure > input:hover {
+    background-color: rgba(215, 221, 228, 0.93);
+}

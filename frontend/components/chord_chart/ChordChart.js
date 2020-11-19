@@ -2,8 +2,14 @@ import React from "react"
 import { loadMidi } from "../../components/player/Player"
 import Measure from "./Measure";
 
+import "./ChordChart.css";
+
 // Material UI
-import { Button } from '@material-ui/core';
+import { Grid, Fab } from '@material-ui/core';
+
+// Icons
+import { RiMusic2Line, RiCheckLine, RiAddLine } from 'react-icons/ri';
+
 
 let key = 0;
 
@@ -122,32 +128,65 @@ class ChordChart extends React.Component {
 
     render(){
         return(
-            <div>
-                <h1>Chord Chart</h1>
-                <form>
-                    Tempo: 
-                    <input type="range"name="tempo" min="20" max="400" onChange={this.inputHandler}></input>
-                    {this.state.chart.tempo}
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="stretch"
+                className="chart"
+            >
 
-                    <br/><br/>
-                    Groove: 
-                    <select name="groove" onChange={this.inputHandler}>
-                        {this.state.opts}
-                    </select>
+                <p className="chart-name">Chart Name</p>
 
-                    <br/><br/>
-                    Chords sequence: <br/>
+                <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                >
+                    <span>
+                        <RiMusic2Line size="2em" color="black"/>
+                        Style:
+                        <select name="groove" onChange={this.inputHandler}>
+                            {this.state.opts}
+                        </select>
+                    </span>
+
+                    <p>Author</p>
+                    
+                </Grid>
+                
+
+                Tempo: 
+                <input type="range"name="tempo" min="20" max="400" onChange={this.inputHandler}></input>
+                {this.state.chart.tempo}
+
+                <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center"
+                >
                     {Object.keys(this.state.chart.measures).map((id, key) => (
                         <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
                     ))}
 
-                    <button onClick={this.addMeasures}>+</button>
-                    <Button variant="contained" color="primary" onClick={this.sendChords}>
-                        Save
-                    </Button>
+                    <div className="add-measures">
+                        <Fab aria-label="add" id="add-measures-btn" onClick={this.addMeasures}>
+                            <RiAddLine size="2em" color="white"/>                    
+                        </Fab>
+                    </div>
 
-                </form>
-            </div>
+                </Grid>
+
+
+
+                <Fab aria-label="save" id="send-chords-btn" onClick={this.sendChords}>
+                    <RiCheckLine size="2em" color="white"/>                    
+                </Fab>
+
+
+            </Grid>
 
         )
     }

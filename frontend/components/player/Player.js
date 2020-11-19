@@ -161,7 +161,6 @@ class Player extends React.Component {
 
                     <Grid >
                         0:00 / 00:00
-                        X BPM
                     </Grid>
 
                     <Grid>

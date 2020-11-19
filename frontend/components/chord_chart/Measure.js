@@ -1,5 +1,6 @@
 import React from "react"
 
+import "./ChordChart.css";
 
 class Measure extends React.Component {
     constructor(props){
@@ -40,12 +41,12 @@ class Measure extends React.Component {
 
     render(){
         return(
-            <div>Measure {this.state.id}
+            <div className="measure">
                 {Object.keys(this.state.chords).map((id, key) => (
                     <input type="text" id={id} key={key} onChange={this.onChangeChord}></input>
                 ))}
 
-                <button onClick={this.addChord}>+</button>
+
             </div>
         )
     }
