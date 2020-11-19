@@ -1,0 +1,34 @@
+.header {
+    background-color: #51F0CC;
+    padding: 0px 50px 0px 50px;
+}
+
+.header-opts {
+    display: inline-flex !important;
+}
+
+#title {
+    text-decoration: none;
+    color: black;
+}
+
+.upload-groove-content {
+    text-align: center;
+}
+
+#upload-groove-i {
+    margin-right: 20px;
+}
+
+#upload-groove-btn {
+    background-color: #51F0CC;
+    margin-top: 30px;
+}
+
+#upload-groove-btn-i {
+    margin-right: 10px;
+}
+
+#upload-groove-input {
+    display: none;
+}
