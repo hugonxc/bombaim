@@ -11,6 +11,7 @@ import { RiPlayLine, RiRepeat2Line, RiPauseLine, RiSkipBackLine, RiDownload2Line
 
 
 export function loadMidi(buff){
+    this.audio_context.suspend();
     let s = this.state.song
     s.loadedsong = true
     this.setState({
@@ -23,31 +24,39 @@ export function loadMidi(buff){
 }
 
 function buildControls(song){
-    this.audio_context.resume();
     let s = this.state.song
     s.song = song
     this.setState({song: s});
     alert("Done");
+    this.skipBack();
 }
 
 function tick(){
     console.log("tick");
     let song = this.state.song
-    if (this.audio_context.currentTime > song.nextStepTime - song.stepDuration) {
 
-        this.sendNotes(song.song, song.songStart, song.currentSongTime, song.currentSongTime + song.stepDuration, this.audio_context, this.input, this.player);
-        song.currentSongTime = song.currentSongTime + song.stepDuration;
-        song.nextStepTime = song.nextStepTime + song.stepDuration;
-        if (song.currentSongTime > song.song.duration) {
-            song.currentSongTime = song.currentSongTime - song.song.duration;
-            this.sendNotes(song.song, song.songStart, 0, song.currentSongTime, this.audio_context, this.input, this.player);
-            song.songStart = song.songStart + song.song.duration;
+    if(!song.paused){
+        if (this.audio_context.currentTime > song.nextStepTime - song.stepDuration) {
+
+            this.sendNotes(song.song, song.songStart, song.currentSongTime, song.currentSongTime + song.stepDuration, this.audio_context, this.input, this.player);
+            song.currentSongTime = song.currentSongTime + song.stepDuration;
+            song.nextStepTime = song.nextStepTime + song.stepDuration;
+
+            if (song.currentSongTime > song.song.duration) {
+                if (song.repeat) {
+                    song.currentSongTime = song.currentSongTime - song.song.duration;
+                    this.sendNotes(song.song, song.songStart, 0, song.currentSongTime, this.audio_context, this.input, this.player);
+                    song.songStart = song.songStart + song.song.duration;    
+                }else{
+                    this.skipBack();
+                }
+            }
         }
+        this.setState({song: song})
+        window.requestAnimationFrame(function (t) {
+            tick();
+        });    
     }
-    this.setState({song: song})
-    window.requestAnimationFrame(function (t) {
-        tick();
-    });
 }
 
 class Player extends React.Component {
@@ -67,6 +76,8 @@ class Player extends React.Component {
                 songStart: 0,
                 nextStepTime: 0,
                 stepDuration: 0,
+                paused: true,
+                repeat: false
             }
         }
         loadMidi = loadMidi.bind(this);
@@ -96,18 +107,8 @@ class Player extends React.Component {
             this.player.loader.startLoad(this.audio_context, info.url, info.variable);
         }
         this.player.loader.waitLoad(function () {
-            console.log('buildControls');
             buildControls(song);
         });
-    }
-    
-    startPlay = (event) => {
-        event.preventDefault();
-        this.state.song.currentSongTime = 0;
-        this.state.song.songStart = this.audio_context.currentTime;
-        this.state.song.nextStepTime = this.audio_context.currentTime;
-        this.state.song.stepDuration = 44 / 1000;
-        tick(this.state.song.song, this.state.song.stepDuration);
     }
     
     sendNotes = (song, songStart, start, end, audioContext, input, player) => {
@@ -140,8 +141,38 @@ class Player extends React.Component {
         }
     }
 
+    // Player Controls
+    startPlay = () => {
+        if (this.state.song.song != null){
+            this.audio_context.resume();
+            this.state.song.paused = false;
+            tick();
+        }
+    }
+
+    pause = () => {
+        this.state.song.paused = true;
+        this.audio_context.suspend();
+    }
+
+    skipBack = () => {
+        let song = this.state.song;
+        song.currentSongTime = 0;
+        song.songStart = this.audio_context.currentTime;
+        song.nextStepTime = this.audio_context.currentTime;
+        song.stepDuration = 44 / 1000;
+        song.paused = true;
+        this.setState({song: song});
+        this.audio_context.suspend();
+    }
+
+    repeat = () => {
+        this.state.song.repeat = !this.state.song.repeat;
+    }
+
+
     render(){
-        let playerTime = "00:00";
+        let playerTime = "00:00 / 00:00";
         if(this.state.song.song != null){
             playerTime = this.state.song.currentSongTime + " / " + this.state.song.song.duration
         }
@@ -155,10 +186,10 @@ class Player extends React.Component {
                     alignItems="center"
                 >
                     <Grid>
-                        <RiSkipBackLine size="2.2em" color="white" className="player-i"/>
+                        <RiSkipBackLine size="2.2em" color="white" className="player-i" onClick={this.skipBack}/>
                         <RiPlayLine size="2.2em" color="white" className="player-i" onClick={this.startPlay}/>
-                        <RiPauseLine size="2.2em" color="white" className="player-i"/>
-                        <RiRepeat2Line size="2.2em" color="white" className="player-i"/>
+                        <RiPauseLine size="2.2em" color="white" className="player-i" onClick={this.pause}/>
+                        <RiRepeat2Line size="2.2em" color="white" className="player-i" onClick={this.repeat}/>
                     </Grid>
 
                     <Grid className="player-time">
@@ -172,11 +203,6 @@ class Player extends React.Component {
 
                 </Grid>
             </Box>
-
-            // <div>
-            //     <h1>Player</h1>
-            // </div>
-
         )
     }
 }
