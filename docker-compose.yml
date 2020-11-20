@@ -28,6 +28,8 @@ services:
       - notused:/code/app/node_modules
     ports:
       - 1234:1234
+      - 2345:2345
+
 
 volumes:
   notused:

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel serve index.html --host=0.0.0.0",
+    "start": "parcel serve index.html --host=0.0.0.0 --hmr-port 2345",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
