@@ -12,6 +12,16 @@
     margin-left: 0px;
 }
 
+.player-i:active {
+    color: #51F0CC !important;
+}
+
+.player-i-active {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #51F0CC !important;
+}
+
 .player-i-ctrls {
     margin-right: 30px;
     cursor: pointer;

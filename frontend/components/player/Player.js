@@ -78,6 +78,12 @@ class Player extends React.Component {
                 stepDuration: 0,
                 paused: true,
                 repeat: false
+            },
+
+            style: {
+                play: "player-i",
+                pause: "player-i",
+                repeat: "player-i"
             }
         }
         loadMidi = loadMidi.bind(this);
@@ -143,6 +149,8 @@ class Player extends React.Component {
 
     // Player Controls
     startPlay = () => {
+        this.setIconStyle("pause", "player-i");
+        this.setIconStyle("play", "player-i-active");
         if (this.state.song.song != null){
             this.audio_context.resume();
             this.state.song.paused = false;
@@ -153,6 +161,8 @@ class Player extends React.Component {
     pause = () => {
         this.state.song.paused = true;
         this.audio_context.suspend();
+        this.setIconStyle("pause", "player-i-active");
+        this.setIconStyle("play", "player-i");
     }
 
     skipBack = () => {
@@ -164,12 +174,21 @@ class Player extends React.Component {
         song.paused = true;
         this.setState({song: song});
         this.audio_context.suspend();
+        this.setIconStyle("pause", "player-i");
+        this.setIconStyle("play", "player-i");
     }
 
     repeat = () => {
         this.state.song.repeat = !this.state.song.repeat;
+        let v = this.state.song.repeat ? "player-i-active" : "player-i";
+        this.setIconStyle("repeat", v);
     }
 
+    setIconStyle = (name, value) => {
+        let style = this.state.style;
+        style[name] = value;
+        this.setState({style: style});
+    }
 
     render(){
         let currentTime = "00:00";
@@ -196,9 +215,9 @@ class Player extends React.Component {
                 >
                     <Grid>
                         <RiSkipBackLine size="2.2em" color="white" className="player-i" onClick={this.skipBack}/>
-                        <RiPlayLine size="2.2em" color="white" className="player-i" onClick={this.startPlay}/>
-                        <RiPauseLine size="2.2em" color="white" className="player-i" onClick={this.pause}/>
-                        <RiRepeat2Line size="2.2em" color="white" className="player-i" onClick={this.repeat}/>
+                        <RiPlayLine size="2.2em" color="white" className={this.state.style.play} onClick={this.startPlay} />
+                        <RiPauseLine size="2.2em" color="white" className={this.state.style.pause} onClick={this.pause}/>
+                        <RiRepeat2Line size="2.2em" color="white" className={this.state.style.repeat} onClick={this.repeat}/>
                     </Grid>
 
                     <Grid className="player-time">
