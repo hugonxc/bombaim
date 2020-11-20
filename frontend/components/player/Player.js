@@ -21,6 +21,8 @@ export function loadMidi(buff){
     let midiFile = new MIDIFile(buff);
     let song = midiFile.parseSong();
     this.startLoad(song);
+
+    this.addDownloadFile(buff);
 }
 
 function buildControls(song){
@@ -69,7 +71,9 @@ class Player extends React.Component {
         this.state = {
             status: "",
             buff: null,
+            midiFileURL: "",
             song: {
+                name: "song",
                 song: null,
                 loadedsong: false,
                 currentSongTime: 0,
@@ -146,6 +150,13 @@ class Player extends React.Component {
             }
         }
     }
+
+    addDownloadFile = (buff) => {
+        let data = new Blob([buff], {type: 'text/midi'});
+        var midiFileURL = window.URL.createObjectURL(data);
+        this.setState({midiFileURL: midiFileURL});
+    }
+
 
     // Player Controls
     startPlay = () => {
@@ -226,7 +237,9 @@ class Player extends React.Component {
 
                     <Grid>
                         <RiEqualizerFill size="2.2em" color="white" className="player-i-ctrls"/>
-                        <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
+                        <a href={this.state.midiFileURL} download={this.state.song.name + ".midi"}>
+                            <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
+                        </a>
                     </Grid>
 
                 </Grid>
