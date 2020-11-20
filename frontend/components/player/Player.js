@@ -172,9 +172,18 @@ class Player extends React.Component {
 
 
     render(){
-        let playerTime = "00:00 / 00:00";
+        let currentTime = "00:00";
+        let durationTime = "00:00";
+        let currentDate = new Date(0);
+        let durationDate = new Date(0);
+
         if(this.state.song.song != null){
-            playerTime = this.state.song.currentSongTime + " / " + this.state.song.song.duration
+            currentDate.setSeconds(this.state.song.currentSongTime);
+            currentTime = currentDate.toISOString().substr(14, 5);
+
+            durationDate.setSeconds(this.state.song.song.duration);
+            durationTime = durationDate.toISOString().substr(14, 5);
+
         }
 
         return(
@@ -193,7 +202,7 @@ class Player extends React.Component {
                     </Grid>
 
                     <Grid className="player-time">
-                        {playerTime}
+                        {currentTime} / {durationTime}
                     </Grid>
 
                     <Grid>
