@@ -25,7 +25,7 @@ function TrackVolume(props){
 
     };
 
-    return (<Slider value={volume} onChange={handler} key={vId}aria-labelledby="continuous-slider" />);
+    return (<Slider value={volume} onChange={handler} key={"slider"+type+vId} />);
 }
 
 function Chooser(props){
@@ -53,12 +53,12 @@ function Chooser(props){
 
     Object.keys(player.loader[keys]()).map(function(key, index) {
         opts.push(
-            <MenuItem value={key} key={key}>
+            <MenuItem value={key} key={player.loader[info](key).title+"_"+id+key}>
                 {player.loader[info](key).title}
             </MenuItem>)
     });
 
-    return (<Select value={id} key={id} onChange={handler}>{opts}</Select>);
+    return (<Select value={id} key={"select"+type+id} onChange={handler}>{opts}</Select>);
 }
 
 
@@ -70,9 +70,10 @@ class Mixer extends React.Component {
             song: null,
             player: null,
             audioContext: null,
+            mixer: {},
             channels: {
-                tracks: null,
-                volumes: null
+                tracks: [],
+                volumes: []
             },
             drums: {
                 tracks: [],
@@ -125,11 +126,10 @@ class Mixer extends React.Component {
                         keys={"instrumentKeys"}
                         info={"instrumentInfo"} 
                         opt={song.tracks[i]}
-
-                        key={i}
+                        key={"iChooser"+i}
                     />
                 );
-                channels.volumes.push(<TrackVolume vId={i} song={song} volume={v} type="tracks" key={i}/>);
+                channels.volumes.push(<TrackVolume vId={i} song={song} volume={v} type="tracks" key={"iTrackVolume"+i}/>);
             }
 
             // Drums
@@ -144,29 +144,15 @@ class Mixer extends React.Component {
                         keys="drumKeys"
                         info="drumInfo"
                         opt={song.beats[i]}
-                        key={i}
+                        key={"dChooser"+i}
                     />
                 );
-                drums.volumes.push(<TrackVolume vId={i} song={song} volume={v} type="beats" key={i} />);
+                drums.volumes.push(<TrackVolume vId={i} song={song} volume={v} type="beats" key={"dTrackVolume"+i} />);
             }
         }
 
         this.setState({channels: channels});
         this.setState({drums: drums});
-    }
-
-    chooserIns = (n, track) => {
-        let player = this.state.player;
-        let opts = [];
-
-        Object.keys(player.loader.instrumentKeys()).map(function(key, index) {
-            opts.push(
-                <MenuItem value={key} key={key}>
-                    {player.loader.instrumentInfo(key).title}
-                </MenuItem>)
-        });
-
-        return (<Select value={n} key={track}>{opts}</Select>)        
     }
 
 
@@ -183,17 +169,19 @@ class Mixer extends React.Component {
                         <h3>General Instruments</h3>
                         <Grid
                         >
-                            {this.state.channels.tracks}
-                            {this.state.channels.volumes}
+                            {this.state.channels.tracks.map((track, index) => (
+                                <span key={"inst"+index}>{track} {this.state.channels.volumes[index]}</span>
+                            ))}
                         </Grid>
                     </DialogContent>
 
                     <DialogContent dividers className="mixer-content">
-                        <h3>General Instruments</h3>
+                        <h3>Drums</h3>
                         <Grid
                         >
-                            {this.state.drums.tracks}
-                            {this.state.drums.volumes}
+                            {this.state.drums.tracks.map((track, index) => (
+                                <span key={"drums"+index}>{track} {this.state.drums.volumes[index]}</span>
+                            ))}
                         </Grid>
                         
 

@@ -215,7 +215,7 @@ class Player extends React.Component {
 
     addMixer = () => {
         this.setState({mixer: null});
-        let mixer = <Mixer song={this.state.song} player={this.player} audioContext={this.audio_context}/>;
+        let mixer = <Mixer song={this.state.song} player={this.player} audioContext={this.audio_context} key="mixer"/>;
         this.setState({mixer: mixer});
     }
 
