@@ -6,7 +6,7 @@ import "./Player.css"
 import { Grid, Slider, Dialog, DialogContent, DialogTitle, MenuItem, Select } from '@material-ui/core';
 
 // Icons
-import { RiEqualizerFill } from 'react-icons/ri';
+import { RiEqualizerFill, RiVolumeUpFill, RiVolumeMuteFill } from 'react-icons/ri';
 
 
 function TrackVolume(props){
@@ -25,7 +25,7 @@ function TrackVolume(props){
 
     };
 
-    return (<Slider value={volume} onChange={handler} key={"slider"+type+vId} />);
+    return (<Slider className="mix-volume-slider" value={volume} onChange={handler} key={"slider"+type+vId} />);
 }
 
 function Chooser(props){
@@ -166,25 +166,33 @@ class Mixer extends React.Component {
                 <Dialog onClose={this.handleClose} aria-labelledby="mixer-dialog-title" open={this.state.open}>
                     <DialogTitle>Mixer</DialogTitle>
                     <DialogContent dividers className="mixer-content">
-                        <h3>General Instruments</h3>
-                        <Grid
-                        >
+                        <h3 className="subtitle" >General Instruments</h3>
+                        <Grid container>
                             {this.state.channels.tracks.map((track, index) => (
-                                <span key={"inst"+index}>{track} {this.state.channels.volumes[index]}</span>
+                                <Grid container alignItems="flex-end" className="mix-ch" key={"inst"+index}>
+                                    <Grid item className="mix-trk" xs={6}>{track}</Grid>
+                                    <Grid item xs={6}>
+                                        <RiVolumeUpFill className="mix-volume-i"/>
+                                        {this.state.channels.volumes[index]}
+                                    </Grid>
+                                </Grid>
                             ))}
                         </Grid>
                     </DialogContent>
 
                     <DialogContent dividers className="mixer-content">
-                        <h3>Drums</h3>
-                        <Grid
-                        >
+                        <h3 className="subtitle">Drums</h3>
+                        <Grid container>
                             {this.state.drums.tracks.map((track, index) => (
-                                <span key={"drums"+index}>{track} {this.state.drums.volumes[index]}</span>
+                                <Grid container alignItems="flex-end" className="mix-ch" key={"drums"+index}>
+                                    <Grid item className="mix-trk" xs={6}>{track}</Grid>
+                                    <Grid item xs={6}>
+                                        <RiVolumeUpFill className="mix-volume-i"/>
+                                        {this.state.drums.volumes[index]}
+                                    </Grid>
+                                </Grid>
                             ))}
                         </Grid>
-                        
-
                     </DialogContent>
                 </Dialog>
             </div>            

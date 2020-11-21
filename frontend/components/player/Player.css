@@ -41,3 +41,27 @@
 .mixer {
     display: inline;
 }
+
+.subtitle {
+    text-align: center;
+}
+
+.mix-ch {
+    margin-top: 20px;
+}
+
+.mix-trk {
+    display: grid;
+    padding-right: 10px !important;
+}
+
+.mix-volume-slider{
+    padding: 0px !important;
+    color: #46D4B7 !important;
+}
+
+.mix-volume-i {
+    font-size: 1.2em;
+    color: #969FAA;
+    margin-bottom: 5px;
+}
