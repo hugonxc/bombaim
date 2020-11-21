@@ -3,6 +3,8 @@ import WebAudioFontPlayer from 'webaudiofont'
 
 import "./Player.css"
 
+import Mixer from "./Mixer";
+
 // Material
 import { Grid, Box } from '@material-ui/core';
 
@@ -31,6 +33,8 @@ function buildControls(song){
     this.setState({song: s});
     alert("Done");
     this.skipBack();
+    this.addMixer();
+    this.addDownloadFile();
 }
 
 function tick(){
@@ -72,6 +76,8 @@ class Player extends React.Component {
             status: "",
             buff: null,
             midiFileURL: "",
+            download: null,
+            mixer: null,
             song: {
                 name: "song",
                 song: null,
@@ -155,6 +161,12 @@ class Player extends React.Component {
         let data = new Blob([buff], {type: 'text/midi'});
         var midiFileURL = window.URL.createObjectURL(data);
         this.setState({midiFileURL: midiFileURL});
+        let download = 
+            <a href={this.state.midiFileURL} download={this.state.song.name + ".midi"}>
+                <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
+            </a>
+
+        this.setState({download: download});
     }
 
 
@@ -162,7 +174,7 @@ class Player extends React.Component {
     startPlay = () => {
         this.setIconStyle("pause", "player-i");
         this.setIconStyle("play", "player-i-active");
-        if (this.state.song.song != null){
+        if (this.state.song.song != null){    
             this.audio_context.resume();
             this.state.song.paused = false;
             tick();
@@ -201,6 +213,12 @@ class Player extends React.Component {
         this.setState({style: style});
     }
 
+    addMixer = () => {
+        this.setState({mixer: null});
+        let mixer = <Mixer song={this.state.song} player={this.player} audioContext={this.audio_context}/>;
+        this.setState({mixer: mixer});
+    }
+
     render(){
         let currentTime = "00:00";
         let durationTime = "00:00";
@@ -236,10 +254,8 @@ class Player extends React.Component {
                     </Grid>
 
                     <Grid>
-                        <RiEqualizerFill size="2.2em" color="white" className="player-i-ctrls"/>
-                        <a href={this.state.midiFileURL} download={this.state.song.name + ".midi"}>
-                            <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
-                        </a>
+                        {this.state.mixer}
+                        {this.state.download}
                     </Grid>
 
                 </Grid>

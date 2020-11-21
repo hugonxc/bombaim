@@ -692,7 +692,6 @@ function MIDIFileHeader(buffer) {
 				'T' === String.fromCharCode(this.datas.getUint8(1)) &&
 				'h' === String.fromCharCode(this.datas.getUint8(2)) &&
 				'd' === String.fromCharCode(this.datas.getUint8(3)))) {
-					console.log("HEadedr");
 			throw new Error('Invalid MIDIFileHeader : MThd prefix not found');
 		}
 		// Reading chunk length
@@ -945,7 +944,7 @@ function ensureArrayBuffer(buf) {
 }
 
 // Constructor
-export 	function MIDIFile(buffer, strictMode) {
+function MIDIFile(buffer, strictMode) {
 	var track;
 	var curIndex;
 	var i;
@@ -958,7 +957,6 @@ export 	function MIDIFile(buffer, strictMode) {
 		this.tracks = [new MIDIFileTrack()];
 		// if a buffer is provided, parsing him
 	} else {
-		console.log("HERE");
 		buffer = ensureArrayBuffer(buffer);
 		// Minimum MIDI file size is a headerChunk size (14bytes)
 		// and an empty track (8+3bytes)
