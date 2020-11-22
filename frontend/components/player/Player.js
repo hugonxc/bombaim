@@ -6,7 +6,7 @@ import "./Player.css"
 import Mixer from "./Mixer";
 
 // Material
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box, LinearProgress } from '@material-ui/core';
 
 // Icons
 import { RiPlayLine, RiRepeat2Line, RiPauseLine, RiSkipBackLine, RiDownload2Line, RiEqualizerFill  } from 'react-icons/ri';
@@ -35,13 +35,14 @@ function buildControls(song){
     this.skipBack();
     this.addMixer();
     this.addDownloadFile();
+    this.updateTimer();
 }
 
 function tick(){
-    console.log("tick");
     let song = this.state.song
 
     if(!song.paused){
+        this.updateTimer(song.currentSongTime, song.song.duration);
         if (this.audio_context.currentTime > song.nextStepTime - song.stepDuration) {
 
             this.sendNotes(song.song, song.songStart, song.currentSongTime, song.currentSongTime + song.stepDuration, this.audio_context, this.input, this.player);
@@ -73,6 +74,9 @@ class Player extends React.Component {
         this.input = null
 
         this.state = {
+            progress: 0,
+            currentTime: "00:00",
+            durationTime: "00:00",
             status: "",
             buff: null,
             midiFileURL: "",
@@ -196,6 +200,8 @@ class Player extends React.Component {
         song.stepDuration = 44 / 1000;
         song.paused = true;
         this.setState({song: song});
+        this.setState({progress: 0});
+        this.setState({currentTime: "00:00"});
         this.audio_context.suspend();
         this.setIconStyle("pause", "player-i");
         this.setIconStyle("play", "player-i");
@@ -219,47 +225,49 @@ class Player extends React.Component {
         this.setState({mixer: mixer});
     }
 
-    render(){
-        let currentTime = "00:00";
-        let durationTime = "00:00";
+    updateTimer = (currentTime, durationTime) => {
         let currentDate = new Date(0);
         let durationDate = new Date(0);
 
-        if(this.state.song.song != null){
-            currentDate.setSeconds(this.state.song.currentSongTime);
-            currentTime = currentDate.toISOString().substr(14, 5);
+        currentDate.setSeconds(this.state.song.currentSongTime);
+        this.setState({currentTime: currentDate.toISOString().substr(14, 5)});
 
-            durationDate.setSeconds(this.state.song.song.duration);
-            durationTime = durationDate.toISOString().substr(14, 5);
+        durationDate.setSeconds(this.state.song.song.duration);
+        this.setState({durationTime: durationDate.toISOString().substr(14, 5)});
 
-        }
+        this.setState({progress: (100 * currentTime / durationTime)});
+    }
 
+    render(){
         return(
-            <Box className="player">
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="center"
-                >
-                    <Grid>
-                        <RiSkipBackLine size="2.2em" color="white" className="player-i" onClick={this.skipBack}/>
-                        <RiPlayLine size="2.2em" color="white" className={this.state.style.play} onClick={this.startPlay} />
-                        <RiPauseLine size="2.2em" color="white" className={this.state.style.pause} onClick={this.pause}/>
-                        <RiRepeat2Line size="2.2em" color="white" className={this.state.style.repeat} onClick={this.repeat}/>
-                    </Grid>
+            <div>
+                <Box className="player">
+                    <Grid
+                        container
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                    >
+                        <Grid>
+                            <RiSkipBackLine size="2.2em" color="white" className="player-i" onClick={this.skipBack}/>
+                            <RiPlayLine size="2.2em" color="white" className={this.state.style.play} onClick={this.startPlay} />
+                            <RiPauseLine size="2.2em" color="white" className={this.state.style.pause} onClick={this.pause}/>
+                            <RiRepeat2Line size="2.2em" color="white" className={this.state.style.repeat} onClick={this.repeat}/>
+                        </Grid>
 
-                    <Grid className="player-time">
-                        {currentTime} / {durationTime}
-                    </Grid>
+                        <Grid className="player-time">
+                            {this.state.currentTime} / {this.state.durationTime}
+                        </Grid>
 
-                    <Grid>
-                        {this.state.mixer}
-                        {this.state.download}
-                    </Grid>
+                        <Grid>
+                            {this.state.mixer}
+                            {this.state.download}
+                        </Grid>
 
-                </Grid>
-            </Box>
+                    </Grid>
+                </Box>
+                <LinearProgress className="player-progress-bar" variant="determinate" value={this.state.progress} />
+            </div>
         )
     }
 }

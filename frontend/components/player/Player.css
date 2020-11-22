@@ -38,6 +38,14 @@
     font-weight: 500;
 }
 
+.player-progress-bar {
+    background-color: #328f7c !important;
+}
+
+.MuiLinearProgress-bar{
+    background-color: #51F0CC !important;
+}
+
 .mixer {
     display: inline;
 }
