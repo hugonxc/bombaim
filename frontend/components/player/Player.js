@@ -110,7 +110,6 @@ class Player extends React.Component {
         reverberator.output.connect(this.audio_context.destination);
         this.input = reverberator.input;
 
-        console.log("tracks", song.tracks);
         for (var i = 0; i < song.tracks.length; i++) {
             var nn = this.player.loader.findInstrument(song.tracks[i].program);
             var info = this.player.loader.instrumentInfo(nn);
@@ -118,7 +117,7 @@ class Player extends React.Component {
             song.tracks[i].id = nn;
             this.player.loader.startLoad(this.audio_context, info.url, info.variable);
         }
-        console.log("beats", song.beats);
+
         for (var i = 0; i < song.beats.length; i++) {
             var nn = this.player.loader.findDrum(song.beats[i].n);
             var info = this.player.loader.drumInfo(nn);
@@ -179,9 +178,10 @@ class Player extends React.Component {
         this.setIconStyle("pause", "player-i");
         this.setIconStyle("play", "player-i-active");
         if (this.state.song.song != null){    
-            this.audio_context.resume();
-            this.state.song.paused = false;
-            tick();
+            this.state.song.paused = false;            
+            this.audio_context.resume().then(function (){
+                tick();
+            });
         }
     }
 
