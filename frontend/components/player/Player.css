@@ -1,11 +1,13 @@
 .player {
-    background-color: #969FAA;
+    background-color: rgba(215, 221, 228, 0.43);
     padding: 10px 50px 10px 50px;
+    border-top: #328f7c 1px solid;
 }
 
 .player-i {
     margin-left: 10px;
     cursor: pointer;
+    color: #85898d !important;
 }
 
 .player-i:first-child {
@@ -13,18 +15,19 @@
 }
 
 .player-i:active {
-    color: #51F0CC !important;
+    color: #328f7c !important;
 }
 
 .player-i-active {
     margin-left: 10px;
     cursor: pointer;
-    color: #51F0CC !important;
+    color: #328f7c !important;
 }
 
 .player-i-ctrls {
     margin-right: 30px;
     cursor: pointer;
+    color: #328f7c;
 }
 
 .player-i-ctrls:last-child {
@@ -33,7 +36,7 @@
 }
 
 .player-time {
-    color: white;
+    color: #328f7c;
     font-size: 2em;
     font-weight: 500;
 }
@@ -48,6 +51,9 @@
 
 .mixer {
     display: inline;
+}
+#mixer-i {
+    color: #328f7c;
 }
 
 .subtitle {
@@ -65,7 +71,7 @@
 
 .mix-volume-slider{
     padding: 0px !important;
-    color: #46D4B7 !important;
+    color: #328f7c !important;
 }
 
 .mix-volume-i {

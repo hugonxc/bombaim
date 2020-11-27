@@ -1,23 +1,19 @@
 .header {
-    background-color: #51F0CC;
+    background-color: rgba(215, 221, 228, 0.43);
     padding: 0px 50px 0px 50px;
-}
-
-.header-opts {
-    display: inline-flex !important;
 }
 
 #title {
     text-decoration: none;
-    color: black;
+    color: #328f7c;
+}
+
+.header-i {
+    color: #328f7c;
 }
 
 .upload-groove-content {
     text-align: center;
-}
-
-#upload-groove-i {
-    margin-right: 20px;
 }
 
 #upload-groove-btn {

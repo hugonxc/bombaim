@@ -32,8 +32,8 @@ function UploadGrooveDialog(props) {
   
     return (
       <div>
-        <label style={{cursor: "pointer"}} id="upload-groove-i" onClick={handleClickOpen}>
-            <RiUploadCloud2Line size="3em" color="black"/>
+        <label style={{cursor: "pointer"}} className="header-i" onClick={handleClickOpen}>
+            <RiUploadCloud2Line size="3em" />
         </label>
 
         <Dialog onClose={handleClose} aria-labelledby="upload-groove-dialog-title" open={open}>
@@ -92,15 +92,20 @@ class Header extends React.Component {
                     alignItems="center"
                     
                 >   
-                    <a href="/" id="title"><h1>Bombaim</h1></a>
-                    
-                    <Grid className="header-opts">
-                        <UploadGrooveDialog grooveUpload={this.grooveUpload} />
 
-                        <a href="https://github.com/hugonxc/bombaim">
-                            <AiFillGithub size="3em" color="black"/>
-                        </a>
+
+                    <Grid item xs={2}>
+                        <UploadGrooveDialog grooveUpload={this.grooveUpload} />
                     </Grid>
+
+                    <Grid item xs={8} className="grid-center">
+                        <a href="/" id="title"><h1>BOMBAIM</h1></a>
+                    </Grid>
+                    <Grid item xs={2} className="grid-right">
+                        <a href="https://github.com/hugonxc/bombaim">
+                            <AiFillGithub size="3em" className="header-i"/>
+                        </a>
+                    </Grid>                    
                 </Grid>
             </Box>
         )

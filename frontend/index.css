@@ -1,4 +1,13 @@
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: rgba(215, 221, 228, 0.43);
+    margin-top: 0px !important;
+}
+
+.grid-center {
+    text-align: center;
+}
+
+.grid-right {
+    text-align: end;
 }

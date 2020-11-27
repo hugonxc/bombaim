@@ -19,8 +19,10 @@ class App extends React.Component {
                 justify="flex-start"
                 alignItems="stretch"
             >
-                <Header />
-                <Player />
+                <div style={{position: "fixed", width: "100%"}}>
+                    <Header />
+                    <Player />
+                </div>
                 <ChordChart />
 
             </Grid>

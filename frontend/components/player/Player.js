@@ -166,7 +166,7 @@ class Player extends React.Component {
         this.setState({midiFileURL: midiFileURL});
         let download = 
             <a href={this.state.midiFileURL} download={this.state.song.name + ".midi"}>
-                <RiDownload2Line size="2.2em" color="white" className="player-i-ctrls"/>
+                <RiDownload2Line size="2.2em"  className="player-i-ctrls"/>
             </a>
 
         this.setState({download: download});
@@ -248,18 +248,18 @@ class Player extends React.Component {
                         justify="space-between"
                         alignItems="center"
                     >
-                        <Grid>
-                            <RiSkipBackLine size="2.2em" color="white" className="player-i" onClick={this.skipBack}/>
-                            <RiPlayLine size="2.2em" color="white" className={this.state.style.play} onClick={this.startPlay} />
-                            <RiPauseLine size="2.2em" color="white" className={this.state.style.pause} onClick={this.pause}/>
-                            <RiRepeat2Line size="2.2em" color="white" className={this.state.style.repeat} onClick={this.repeat}/>
+                        <Grid item xs={2}>
+                            <RiSkipBackLine size="2.2em"  className="player-i" onClick={this.skipBack}/>
+                            <RiPlayLine size="2.2em"  className={this.state.style.play} onClick={this.startPlay} />
+                            <RiPauseLine size="2.2em"  className={this.state.style.pause} onClick={this.pause}/>
+                            <RiRepeat2Line size="2.2em"  className={this.state.style.repeat} onClick={this.repeat}/>
                         </Grid>
 
-                        <Grid className="player-time">
+                        <Grid item xs={8} className="player-time grid-center" >
                             {this.state.currentTime} / {this.state.durationTime}
                         </Grid>
 
-                        <Grid>
+                        <Grid item xs={2} className="grid-right">
                             {this.state.mixer}
                             {this.state.download}
                         </Grid>

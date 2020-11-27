@@ -160,7 +160,7 @@ class Mixer extends React.Component {
         return(
             <div className="mixer player-i-ctrls">
                 <label style={{cursor: "pointer"}} id="mixer-i" onClick={this.handleClickOpen}>
-                    <RiEqualizerFill size="2.2em" color="white" />
+                    <RiEqualizerFill size="2.2em" />
                 </label>
                 
                 <Dialog onClose={this.handleClose} aria-labelledby="mixer-dialog-title" open={this.state.open}>

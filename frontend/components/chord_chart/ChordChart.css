@@ -1,6 +1,5 @@
 .chart {
-    padding: 20px 50px 0px 50px;
-
+    padding: 160px 50px 200px 50px;
 }
 
 .chart-name {
@@ -12,11 +11,7 @@
 
 
 #send-chords-btn {
-    position: fixed;
-    bottom: 30px;
-    left: 90%;
-    z-index: 999999;
-    background-color: #FF9052;
+    background-color: #328f7c;
 }
 
 .add-measures {
@@ -27,7 +22,7 @@
 }
 
 #add-measures-btn {
-    background-color: #FF9052;
+    background-color: #328f7c;
     position: relative;
     top: 35%;
 }
@@ -55,4 +50,33 @@
 
 .measure > input:hover {
     background-color: rgba(215, 221, 228, 0.93);
+}
+
+/* Chart controls */
+.chart-controls {
+    padding: 0px 50px 0px 50px;
+    background-color: rgba(215, 221, 228, 0.43);
+    border-top: #328f7c 2px solid;
+}
+
+/* Tempo */
+
+.tempo-popover-content {
+    padding: 10px;
+    width: 350px;
+    color: #328f7c;
+    margin: auto;    
+}
+
+.tempo-popover-center {
+    width: auto !important;
+}
+
+.tempo-popover-number {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.tempo-popover-slider {
+    color: #328f7c !important;
 }

@@ -1,35 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { loadMidi } from "../../components/player/Player"
 import Measure from "./Measure";
+import ChartControls from "./ChartControls";
 
 import "./ChordChart.css";
 
 // Material UI
-import { Grid, Fab } from '@material-ui/core';
+import { Grid, Fab, Slider, Popover, BottomNavigationAction, BottomNavigation } from '@material-ui/core';
 
 // Icons
-import { RiMusic2Line, RiCheckLine, RiAddLine } from 'react-icons/ri';
+import { RiMusic2Line, RiCheckLine, RiAddLine, RiSubtractLine } from 'react-icons/ri';
+import { GiMetronome } from 'react-icons/gi';
 
 
-let key = 0;
 
-function opt(label, grooves){
-    let opts = []
-
-    for (const g of grooves) {
-        key = key + 1;
-        opts.push(<option value={g} key={key}>{g}</option>)
-        
-    }
-
-    key = key + 1;
-    return(
-        <optgroup label={label} key={key}>
-            {opts}
-        </optgroup>  
-
-    )
-}
 
 
 
@@ -81,6 +65,19 @@ class ChordChart extends React.Component {
         this.setState({chart: chart});
     }
 
+    updateGroove = (value) => {
+        console.log("value");
+        let chart = this.state.chart;
+        chart.groove = value
+        this.setState({chart: chart});
+    }
+
+    updateTempo = (value) => {
+        let chart = this.state.chart;
+        chart.tempo = value
+        this.setState({chart: chart});
+    }
+
     addMeasures = (event) => {
         event.preventDefault();
         let chart = this.state.chart;
@@ -95,39 +92,11 @@ class ChordChart extends React.Component {
         this.setState({chart: chart})
     }
 
-    // Get available grooves
-    getGrooves = () => {
-        var url  = 'http://localhost:5000/list_grooves';
-
-        fetch(url, {
-            mode: 'cors',
-            method: 'GET',
-        }).then(response => response.json())
-        .then(
-            (response) => {
-                this.mountGrooves(response);
-            }
-        )
-        .catch((error) => {
-                alert("Error retrieving grooves");
-        });
-    }
-
-    mountGrooves = (grooves) => {
-        let gs = []
-        for (const key in grooves) {
-            gs.push(opt(key, grooves[key]))
-        }
-        this.setState({opts: gs})
-    }
-
-    componentDidMount(){
-        this.getGrooves();
-    }
 
 
     render(){
         return(
+        <div>
             <Grid
                 container
                 direction="column"
@@ -144,22 +113,13 @@ class ChordChart extends React.Component {
                     justify="space-between"
                     alignItems="center"
                 >
-                    <span>
-                        <RiMusic2Line size="2em" color="black"/>
-                        Style:
-                        <select name="groove" onChange={this.inputHandler}>
-                            {this.state.opts}
-                        </select>
-                    </span>
 
                     <p>Author</p>
                     
                 </Grid>
                 
 
-                Tempo: 
-                <input type="range"name="tempo" min="20" max="400" onChange={this.inputHandler}></input>
-                {this.state.chart.tempo}
+
 
                 <Grid
                     container
@@ -178,15 +138,11 @@ class ChordChart extends React.Component {
                     </div>
 
                 </Grid>
-
-
-
-                <Fab aria-label="save" id="send-chords-btn" onClick={this.sendChords}>
-                    <RiCheckLine size="2em" color="white"/>                    
-                </Fab>
-
-
             </Grid>
+
+            <ChartControls updateTempo={this.updateTempo} sendChords={this.sendChords} updateGroove={this.updateGroove}/>
+
+        </div>
 
         )
     }
