@@ -121,7 +121,6 @@ class ChordChart extends React.Component {
                 alignItems="center"
                 className="chart"
             >
-
                 <CustomInput name="name" value={this.state.chart.name} onChange={this.inputHandler} className="chart-name" />
 
                 <Grid
@@ -130,7 +129,6 @@ class ChordChart extends React.Component {
                     justify="space-between"
                     alignItems="center"
                 >
-
                     <CustomInput name="author" value={this.state.chart.author} onChange={this.inputHandler} className="chart-author" />
                     
                 </Grid>
@@ -142,14 +140,20 @@ class ChordChart extends React.Component {
                     alignItems="center"
                 >
                     {Object.keys(this.state.chart.measures).map((id, key) => (
-                        <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
+                        <Grid item xs={3} key={"item"+id} className="measure">
+                            <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
+                        </Grid>
+
                     ))}
 
-                    <div className="add-measures">
-                        <Fab aria-label="add" id="add-measures-btn" onClick={this.addMeasures}>
-                            <RiAddLine size="2em" color="white"/>                    
-                        </Fab>
-                    </div>
+                    <Grid item xs={3}>
+                        <div className="add-measures">
+                            <Fab aria-label="add" id="add-measures-btn" onClick={this.addMeasures}>
+                                <RiAddLine size="2em" color="white"/>                    
+                            </Fab>
+                        </div>
+
+                    </Grid>
 
                 </Grid>
             </Grid>

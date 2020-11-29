@@ -31,8 +31,6 @@
 
 .add-measures {
     height: 200px;
-    width: 370px;
-    border-left: 5px solid #969FAA;
     text-align: center;
 }
 
@@ -42,7 +40,7 @@
     top: 35%;
 }
 .add-measures:hover {
-    background-color: rgba(215, 221, 228, 0.93);
+    background-color: #969FAA;
 }
 
 /* Measure */
@@ -51,26 +49,51 @@
     height: 200px;
     background-color: transparent;
     display: inline-flex;
+    border-right: 5px solid #969FAA;
     border-left: 5px solid #969FAA;
+    outline: 5px solid #f1f3f5;
     margin: 20px 0px 20px 0px;
+    box-shadow: 5px 5px yellow !important;
 }
 
-.measure > input {
+.measure:first-child {
+    border-left: 5px solid #969FAA;
+}
+
+.measure:first-child > .measure-div {
+    border-left: 5px solid #969FAA;
+}
+
+.measure:nth-last-child(2) {
+    border-right: 5px solid #969FAA !important;
+}
+
+.measure:nth-last-child(2) > .measure-div {
+    border-right: 5px solid #969FAA;
+}
+
+.measure-div {
+    margin: 0px 3px 0px 3px;
+    width: 100%;
+}
+
+.measure-div > input {
     background-color: transparent;
     font-size: 4em;
-    width: 370px;
+    width: 100%;
+    height: 100%;
     text-align: center;
     border: 0px;
 }
 
-.measure > input:hover {
+.measure-div:hover {
     background-color: rgba(215, 221, 228, 0.93);
 }
 
 /* Chart controls */
 .chart-controls {
     padding: 0px 50px 0px 50px;
-    background-color: rgba(215, 221, 228, 0.43);
+    background-color: #f1f3f5;
     border-top: #328f7c 2px solid;
 }
 

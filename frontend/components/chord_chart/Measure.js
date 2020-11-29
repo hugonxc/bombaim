@@ -41,7 +41,7 @@ class Measure extends React.Component {
 
     render(){
         return(
-            <div className="measure">
+            <div className="measure-div">
                 {Object.keys(this.state.chords).map((id, key) => (
                     <input type="text" id={id} key={key} onChange={this.onChangeChord}></input>
                 ))}
