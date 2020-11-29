@@ -6,14 +6,32 @@ import ChartControls from "./ChartControls";
 import "./ChordChart.css";
 
 // Material UI
-import { Grid, Fab, Slider, Popover, BottomNavigationAction, BottomNavigation } from '@material-ui/core';
+import { Grid, Fab } from '@material-ui/core';
 
 // Icons
-import { RiMusic2Line, RiCheckLine, RiAddLine, RiSubtractLine } from 'react-icons/ri';
-import { GiMetronome } from 'react-icons/gi';
+import { RiAddLine } from 'react-icons/ri';
 
 
+function CustomInput(props){
+    let [value, setValue] = React.useState(props.value);
+    let className = props.className;
+    let inputName = props.name;
 
+    const inputHandler = (event) =>{
+        if(props.onChange != null){
+            let name = event.target.name;
+            let value = event.target.value;
+            setValue(value);
+            props.onChange(name, value);
+        }
+    }
+
+    return(
+        <Grid item>
+            <input type="text"name={inputName} value={value} onChange={inputHandler} className={className}/>
+        </Grid>
+    )
+}
 
 
 
@@ -24,8 +42,10 @@ class ChordChart extends React.Component {
         this.state = {
             opts: [],
             chart: {
+                name: "Song name",
+                author: "Author",
                 tempo: "80",
-                groove: '',
+                groove: "",
                 measures: {
                     1: [],
                 }
@@ -57,16 +77,13 @@ class ChordChart extends React.Component {
         });
     }
 
-    inputHandler = (event) => {
-        let name = event.target.name;
-        let value = event.target.value;
+    inputHandler = (name, value) => {
         let chart = this.state.chart;
         chart[name] = value;
         this.setState({chart: chart});
     }
 
     updateGroove = (value) => {
-        console.log("value");
         let chart = this.state.chart;
         chart.groove = value
         this.setState({chart: chart});
@@ -101,11 +118,11 @@ class ChordChart extends React.Component {
                 container
                 direction="column"
                 justify="center"
-                alignItems="stretch"
+                alignItems="center"
                 className="chart"
             >
 
-                <p className="chart-name">Chart Name</p>
+                <CustomInput name="name" value={this.state.chart.name} onChange={this.inputHandler} className="chart-name" />
 
                 <Grid
                     container
@@ -114,13 +131,10 @@ class ChordChart extends React.Component {
                     alignItems="center"
                 >
 
-                    <p>Author</p>
+                    <CustomInput name="author" value={this.state.chart.author} onChange={this.inputHandler} className="chart-author" />
                     
                 </Grid>
                 
-
-
-
                 <Grid
                     container
                     direction="row"

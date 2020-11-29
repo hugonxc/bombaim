@@ -2,13 +2,28 @@
     padding: 160px 50px 200px 50px;
 }
 
-.chart-name {
-    font-size: 3em;
+.chart input{
+    outline: none;
+    font-family: 'Montserrat', sans-serif !important;
+    background-color: transparent !important;
+    border: 0px;
     text-align: center;
-    margin: 0;
-    padding: 0;
 }
 
+.chart input:focus{
+    border-bottom: 1px black solid;
+}
+
+
+.chart-name {
+    font-size: 3em;
+}
+
+.chart-author {
+    font-size: 1.6em;
+    text-align: start !important;
+    width: 100%;
+}
 
 #send-chords-btn {
     background-color: #328f7c;

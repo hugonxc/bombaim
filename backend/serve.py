@@ -131,6 +131,8 @@ def song():
         data = request.get_json()
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".mma", delete=False) as outfile:
+            outfile.write("// Name "+ data["name"] + "\n")
+            outfile.write("// Author "+ data["author"] + "\n")
             outfile.write("Tempo "+ data["tempo"] + "\n")
             outfile.write("Groove "+ data["groove"])
 
