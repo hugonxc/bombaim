@@ -2,7 +2,9 @@ import React, { useEffect } from "react"
 
 
 // Material UI
-import { Drawer, Grid, Slider, Fab } from '@material-ui/core';
+import { Drawer, Grid, Slider, Fab, TextField , Accordion, AccordionDetails, AccordionSummary, ListSubheader } from '@material-ui/core';
+import CustomAutocomplete from "../utils/CustomAutocomplete";
+
 
 // Icons
 import { RiAddLine, RiSubtractLine, RiMusic2Line, RiCheckLine } from 'react-icons/ri';
@@ -33,7 +35,7 @@ function TempoSelect(props){
 
     useEffect(() => {
         if(props.updateTempo){
-            props.updateTempo(tempo.toString());
+            props.updateTempo("tempo", tempo.toString());
         }
      }, [tempo]);
 
@@ -57,22 +59,6 @@ function TempoSelect(props){
 function GrooveSelect(props) {
     const [grooves, setGrooves] = React.useState([]);
 
-    let key = 0;
-    const opt = (label, grooves) =>{
-       let opts = []
-
-        for (const g of grooves) {
-            key = key + 1;
-            opts.push(<option value={g} key={key}>{g}</option>)        
-        }
-
-        key = key + 1;
-        return(
-            <optgroup label={label} key={key}>
-                {opts}
-            </optgroup>
-        )
-    }
     // Get available grooves
     const getGrooves = () => {
         var url  = 'http://localhost:5000/list_grooves';
@@ -91,36 +77,36 @@ function GrooveSelect(props) {
         });
     }
 
-
     const mountGrooves = (grooves) => {
         let gs = []
         for (const key in grooves) {
-            gs.push(opt(key, grooves[key]))
+            for (const groove of grooves[key]){
+                gs.push({
+                        group: key,
+                        value: groove  
+                });
+            }
         }
         setGrooves(gs);
-
     }
 
-    const updateGroove = (event) => {
+    const updateGroove = (newValue) => {
         if(props.updateGroove){
-            props.updateGroove(event.target.value);
+            props.updateGroove("groove", newValue);
         }
     }
 
     useEffect(() => {
         getGrooves();
-      }, [])
+      }, []);
 
-
-    return(
+      return(
         <span>
-            <RiMusic2Line size="2em" color="black"/>
+        <RiMusic2Line size="2em" color="black"/>
             Style:
-            <select name="groove" onChange={updateGroove}>
-                {grooves}
-            </select>
+            <CustomAutocomplete options={grooves} onChange={updateGroove}/>
         </span>
-    )
+      )
 }
 
 
@@ -134,7 +120,6 @@ function SaveButton(props) {
             <Fab aria-label="save" onClick={sendChords} id="send-chords-btn">
                 <RiCheckLine size="2em" color="white"/>                    
             </Fab>
-
         </div>
     )
 }

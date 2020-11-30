@@ -158,7 +158,7 @@ class ChordChart extends React.Component {
                 </Grid>
             </Grid>
 
-            <ChartControls updateTempo={this.updateTempo} sendChords={this.sendChords} updateGroove={this.updateGroove}/>
+            <ChartControls updateTempo={this.inputHandler} sendChords={this.sendChords} updateGroove={this.inputHandler}/>
 
         </div>
 
