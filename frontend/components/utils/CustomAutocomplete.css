@@ -1,0 +1,15 @@
+#custom-combo-box {
+    width: 100%;
+}
+
+#custom-combo-box-label {
+    color: #328f7c !important;
+}
+
+input {
+    text-align: center !important;
+}
+
+.MuiInput-underline:after {
+    border-color: #328f7c !important;
+}

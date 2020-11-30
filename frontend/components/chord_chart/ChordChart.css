@@ -97,6 +97,11 @@
     border-top: #328f7c 2px solid;
 }
 
+#groove-selector-i {
+    color: #328f7c;
+    margin-left: 25%;
+}
+
 /* Tempo */
 
 .tempo-popover-content {

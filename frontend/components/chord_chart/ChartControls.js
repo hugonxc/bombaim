@@ -1,10 +1,8 @@
 import React, { useEffect } from "react"
 
-
 // Material UI
-import { Drawer, Grid, Slider, Fab, TextField , Accordion, AccordionDetails, AccordionSummary, ListSubheader } from '@material-ui/core';
+import { Drawer, Grid, Slider, Fab } from '@material-ui/core';
 import CustomAutocomplete from "../utils/CustomAutocomplete";
-
 
 // Icons
 import { RiAddLine, RiSubtractLine, RiMusic2Line, RiCheckLine } from 'react-icons/ri';
@@ -101,11 +99,10 @@ function GrooveSelect(props) {
       }, []);
 
       return(
-        <span>
-        <RiMusic2Line size="2em" color="black"/>
-            Style:
-            <CustomAutocomplete options={grooves} onChange={updateGroove}/>
-        </span>
+        <Grid container justify="space-between" alignItems="center">
+            <Grid item xs={2}><RiMusic2Line size="2em" id="groove-selector-i"/></Grid>
+            <Grid item xs={10}><CustomAutocomplete options={grooves} onChange={updateGroove}/></Grid>
+        </Grid>
       )
 }
 
@@ -140,13 +137,13 @@ class ChartControls extends React.Component {
         return(
             <Drawer variant="permanent" anchor="bottom">
                 <Grid container className="chart-controls" justify="space-between" alignItems="center">
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <GrooveSelect updateGroove={this.state.updateGroove}/>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                         <TempoSelect updateTempo={this.state.updateTempo} />
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <SaveButton sendChords={this.state.sendChords}/>                        
                     </Grid>
                 </Grid>

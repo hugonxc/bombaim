@@ -1,8 +1,9 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { VariableSizeList } from 'react-window';
-import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
+import { TextField, Typography, ListSubheader } from '@material-ui/core';
+
+import "./CustomAutocomplete.css";
 
 const OuterElementContext = React.createContext({});
 
@@ -11,14 +12,9 @@ const OuterElementType = React.forwardRef((props, ref) => {
     return <div ref={ref} {...props} {...outerProps} />;
   });
 
-
-function renderRow(props) {
+const renderRow = (props) => {
     const { data, index, style } = props;
-    return React.cloneElement(data[index], {
-        style: {
-        ...style,
-        },
-    });
+    return React.cloneElement(data[index], {style: {...style}});
 }
     
 // Adapter for react-window
@@ -26,24 +22,17 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
     const { children, ...other } = props;
     const itemData = React.Children.toArray(children);
     const itemCount = itemData.length;
-    const itemSize = 36;
-      
-    const getChildSize = (child) => {
-        if (React.isValidElement(child) && child.type === AccordionDetails) {
-            return 48;
-        }
-        return itemSize;
-    };
           
     return (
         <div ref={ref}>
             <OuterElementContext.Provider value={other}>
                 <VariableSizeList
                     itemData={itemData}
-                    height={600}
+                    height={500}
                     width="100%"
                     outerElementType={OuterElementType}
-                    itemSize={(index) => getChildSize(itemData[index])}
+                    innerElementType="div"
+                    itemSize={(index) => 50}
                     overscanCount={5}
                     itemCount={itemCount}
                 >
@@ -53,18 +42,13 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
         </div>
     );
 });
-      
+
 const renderGroup = (params) => [
-    <Accordion key={params.key} TransitionProps={{ unmountOnExit: true }}>
-        <AccordionSummary>
-            {params.group}
-        </AccordionSummary>
-        <AccordionDetails>
-            {params.children}
-        </AccordionDetails>
-    </Accordion>
+    <ListSubheader key={params.key} component="div">
+        {params.group}
+    </ListSubheader>,
+    params.children,
 ]
-  
 
 export default function CustomAutocomplete(props) {
     let options = props.options;
@@ -79,6 +63,7 @@ export default function CustomAutocomplete(props) {
     return (
         <Autocomplete
             id="custom-combo-box"
+            size="small"
             freeSolo
             options={options}
             ListboxComponent={ListboxComponent}
@@ -86,8 +71,8 @@ export default function CustomAutocomplete(props) {
             getOptionLabel={(option) => option.value}
             onChange={onChange}
             renderGroup={renderGroup}
-            style={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} variant="outlined" />}
+            renderInput={(params) => <TextField {...params} label="Select your style" id="custom-combo-box-textfield" />}
+            renderOption={(option) => <Typography noWrap>{option.value}</Typography>}
         />
     );
 }
