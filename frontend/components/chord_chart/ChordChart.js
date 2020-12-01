@@ -1,7 +1,10 @@
-import React, { useEffect } from "react"
-import { loadMidi } from "../../components/player/Player"
+import React, { useEffect } from "react";
+
 import Measure from "./Measure";
 import ChartControls from "./ChartControls";
+
+import { loadMidi } from "../../components/player/Player";
+import { loading, sendAlert } from "../../components/utils/CustomAlert";
 
 import "./ChordChart.css";
 
@@ -55,6 +58,7 @@ class ChordChart extends React.Component {
     
     sendChords = (event) => {
         event.preventDefault();
+        loading(true);
         var url  = 'http://localhost:5000/song';
 
         var data = JSON.stringify(this.state.chart);
@@ -72,8 +76,8 @@ class ChordChart extends React.Component {
             loadMidi(buff);
         })
         .catch((error) => {
-                alert("Something went wrong while parsing this file");
-                // location.reload()
+            loading(false);
+            sendAlert("error", "Error parsing file. Please check your input");
         });
     }
 

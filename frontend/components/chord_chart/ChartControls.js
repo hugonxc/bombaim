@@ -1,5 +1,7 @@
 import React, { useEffect } from "react"
 
+import { loading, sendAlert } from "../../components/utils/CustomAlert";
+
 // Material UI
 import { Drawer, Grid, Slider, Fab } from '@material-ui/core';
 import CustomAutocomplete from "../utils/CustomAutocomplete";
@@ -59,6 +61,7 @@ function GrooveSelect(props) {
 
     // Get available grooves
     const getGrooves = () => {
+        loading(true);
         var url  = 'http://localhost:5000/list_grooves';
 
         fetch(url, {
@@ -71,7 +74,8 @@ function GrooveSelect(props) {
             }
         )
         .catch((error) => {
-                alert("Error retrieving grooves");
+                loading(false);
+                sendAlert("error", "Cannot load groove list :(");
         });
     }
 
@@ -85,6 +89,7 @@ function GrooveSelect(props) {
                 });
             }
         }
+        loading(false);
         setGrooves(gs);
     }
 

@@ -4,6 +4,7 @@ import WebAudioFontPlayer from 'webaudiofont'
 import "./Player.css"
 
 import Mixer from "./Mixer";
+import { loading, sendAlert } from "../../components/utils/CustomAlert";
 
 // Material
 import { Grid, Box, LinearProgress } from '@material-ui/core';
@@ -31,7 +32,12 @@ function buildControls(song){
     let s = this.state.song
     s.song = song;
     this.setState({song: s});
-    alert("Done");
+
+    // Stop loading and alert success
+    loading(false)
+    sendAlert("success", "Your song is ready!")
+
+    // Call player cb functions
     this.skipBack();
     this.addMixer();
     this.addDownloadFile();

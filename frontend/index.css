@@ -11,3 +11,8 @@ body {
 .grid-right {
     text-align: end;
 }
+
+.backdrop {
+    z-index: 999999 !important;
+    color: #328f7c;
+}
