@@ -8,9 +8,7 @@ class Measure extends React.Component {
 
         this.state = {
             id: props.id,            
-            chords: {
-                1: "",
-            }
+            chords: {}
         }
     }
 
@@ -24,11 +22,11 @@ class Measure extends React.Component {
         }
     }
 
-    addChord = (event) => {
-        event.preventDefault();
+    addChord = () => {
         let chords = this.state.chords;
         let len = Object.keys(chords).length;
-        chords[len+1] = "";
+        let newId = "m"+this.state.id+"c"+(len+1);
+        chords[newId] = "";
         this.setState({chords: chords});
     }
 
@@ -39,13 +37,18 @@ class Measure extends React.Component {
         this.onChangeMeasure();
     }
 
+    componentDidMount(){
+        this.addChord();
+    }
+
+
     render(){
         return(
             <div className="measure-div">
                 {Object.keys(this.state.chords).map((id, key) => (
-                    <input type="text" id={this.state.id} key={key} onChange={this.onChangeChord}></input>
+                    <input type="text" id={id} key={key} onChange={this.onChangeChord}></input>
                 ))}
-
+                <button onClick={this.addChord}>+</button>
 
             </div>
         )

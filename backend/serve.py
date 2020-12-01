@@ -140,9 +140,14 @@ def song():
             # Unpack measures
             for measure in data["measures"]:
                 outfile.write("\n" + str(measure) + " ")
+                chord_n = 1
+                chord_ids = "["
                 for chord in data["measures"][measure]:
                     outfile.write(chord + " ")
-                outfile.write("["+ str(measure)+"]")
+                    chord_id = "m"+str(measure)+"c"+str(chord_n)+" "
+                    chord_ids += chord_id 
+                    chord_n += 1
+                outfile.write(chord_ids+"]")
         outfile.close()
         
         if outfile:
