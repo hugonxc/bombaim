@@ -77,7 +77,12 @@
     width: 100%;
 }
 
-.measure-div > input {
+.measure-div > div {
+    width: 100%;
+    height: 100%;
+}
+
+.measure-div > div > input {
     background-color: transparent;
     font-size: 4em;
     width: 100%;
@@ -86,8 +91,10 @@
     border: 0px;
 }
 
-.measure-div > input:focus {
+.measure-div > div:focus {
     background-color: rgba(215, 221, 228, 0.93) !important;
+    border: 0px !important;
+    outline: 0px !important;
 }
 
 .measure-div:hover {

@@ -46,7 +46,10 @@ class Measure extends React.Component {
         return(
             <div className="measure-div">
                 {Object.keys(this.state.chords).map((id, key) => (
-                    <input type="text" id={id} key={key} onChange={this.onChangeChord}></input>
+                    <div tabIndex="-1" key={key}>
+                        <input type="text" id={id} key={key} onChange={this.onChangeChord}></input>
+                    </div>
+
                 ))}
                 <button onClick={this.addChord}>+</button>
 
