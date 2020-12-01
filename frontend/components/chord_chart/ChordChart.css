@@ -82,13 +82,16 @@
     height: 100%;
 }
 
-.measure-div > div > input {
+.measure-div > div .MuiInput-underline:before{
+    border: 0px !important;
+}
+.measure-div > div input {
     background-color: transparent;
-    font-size: 4em;
+    font-size: 3.7em;
     width: 100%;
     height: 100%;
     text-align: center;
-    border: 0px;
+    border: 0px !important;
 }
 
 .measure-div > div:focus {
@@ -111,6 +114,10 @@
 #groove-selector-i {
     color: #328f7c;
     margin-left: 25%;
+}
+
+#groove-combo-box-label{
+    color: #328f7c !important;    
 }
 
 /* Tempo */

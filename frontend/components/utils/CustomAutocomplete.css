@@ -2,14 +2,22 @@
     width: 100%;
 }
 
-#custom-combo-box-label {
-    color: #328f7c !important;
-}
-
 input {
     text-align: center !important;
 }
 
 .MuiInput-underline:after {
     border-color: #328f7c !important;
+}
+
+.MuiFormControl-root{
+    height: 100% !important;
+}
+
+.MuiInput-root {
+    height: 100% !important;
+}
+
+.MuiInputBase-input {
+    height: 100% !important;
 }

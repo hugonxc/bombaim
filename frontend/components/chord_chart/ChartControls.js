@@ -88,7 +88,7 @@ function GrooveSelect(props) {
         setGrooves(gs);
     }
 
-    const updateGroove = (newValue) => {
+    const updateGroove = (event, newValue) => {
         if(props.updateGroove){
             props.updateGroove("groove", newValue);
         }
@@ -101,7 +101,13 @@ function GrooveSelect(props) {
       return(
         <Grid container justify="space-between" alignItems="center">
             <Grid item xs={2}><RiMusic2Line size="2em" id="groove-selector-i"/></Grid>
-            <Grid item xs={10}><CustomAutocomplete options={grooves} onChange={updateGroove}/></Grid>
+            <Grid item xs={10}>
+                <CustomAutocomplete 
+                    options={grooves}
+                    onChange={updateGroove} 
+                    id="groove-combo-box"
+                    label="Select your style"/>
+            </Grid>
         </Grid>
       )
 }

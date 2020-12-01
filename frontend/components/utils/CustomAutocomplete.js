@@ -1,5 +1,6 @@
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { VariableSizeList } from 'react-window';
 import { TextField, Typography, ListSubheader } from '@material-ui/core';
 
@@ -52,26 +53,33 @@ const renderGroup = (params) => [
 
 export default function CustomAutocomplete(props) {
     let options = props.options;
+    let id = props.id;
+    let label = props.label;
+
+    const filterOptions = createFilterOptions({
+        ignoreCase: props.ignoreCase,
+      });
+
 
     const onChange = (event, newValue) => {
         let value = newValue == null ? "" : newValue.value;
         if(props.onChange){
-            props.onChange(value)
+            props.onChange(event, value)
         }
     }
 
     return (
         <Autocomplete
-            id="custom-combo-box"
+            id={id}
             size="small"
-            freeSolo
             options={options}
+            filterOptions={filterOptions}
             ListboxComponent={ListboxComponent}
             groupBy={(option) => option.group}
             getOptionLabel={(option) => option.value}
             onChange={onChange}
             renderGroup={renderGroup}
-            renderInput={(params) => <TextField {...params} label="Select your style" id="custom-combo-box-textfield" />}
+            renderInput={(params) => <TextField {...params} label={label} />}
             renderOption={(option) => <Typography noWrap>{option.value}</Typography>}
         />
     );

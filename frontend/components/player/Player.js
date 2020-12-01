@@ -244,8 +244,8 @@ class Player extends React.Component {
         for (const l of this.state.song.lyrics) {
             if(currentTime.toFixed(1) == l.playTime/1000){
                 let chordId = l.text.replace(/\s/g, '');
-                let currentChord = document.getElementById(chordId);
-                currentChord.parentElement.focus();
+                let currentChordDiv = document.getElementById("div-"+chordId);
+                currentChordDiv.focus();
             }
         }
     }
