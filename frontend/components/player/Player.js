@@ -250,6 +250,13 @@ class Player extends React.Component {
         }
     }
 
+    componentDidMount(){
+        window.addEventListener('visibilitychange', (event) => {
+            // Pause when leave app page
+            this.pause();
+          });
+    }
+
     render(){
         return(
             <div>
