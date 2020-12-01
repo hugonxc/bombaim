@@ -86,6 +86,10 @@
     border: 0px;
 }
 
+.measure-div > input:focus {
+    background-color: rgba(215, 221, 228, 0.93) !important;
+}
+
 .measure-div:hover {
     background-color: rgba(215, 221, 228, 0.93);
 }

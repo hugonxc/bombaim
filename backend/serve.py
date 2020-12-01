@@ -133,6 +133,7 @@ def song():
         with tempfile.NamedTemporaryFile(mode="w", suffix=".mma", delete=False) as outfile:
             outfile.write("// Name "+ data["name"] + "\n")
             outfile.write("// Author "+ data["author"] + "\n")
+            outfile.write("Lyric On" + "\n") 
             outfile.write("Tempo "+ data["tempo"] + "\n")
             outfile.write("Groove "+ data["groove"])
 
@@ -141,6 +142,7 @@ def song():
                 outfile.write("\n" + str(measure) + " ")
                 for chord in data["measures"][measure]:
                     outfile.write(chord + " ")
+                outfile.write("["+ str(measure)+"]")
         outfile.close()
         
         if outfile:

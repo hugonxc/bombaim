@@ -14,22 +14,22 @@ import { RiPlayLine, RiRepeat2Line, RiPauseLine, RiSkipBackLine, RiDownload2Line
 
 export function loadMidi(buff){
     this.audio_context.suspend();
-    let s = this.state.song
-    s.loadedsong = true
+    let s = this.state.song;
+    s.loadedsong = true;
     this.setState({
         song: s
     })
 
     let midiFile = new MIDIFile(buff);
+    s.lyrics = midiFile.getLyrics();
     let song = midiFile.parseSong();
     this.startLoad(song);
-
     this.addDownloadFile(buff);
 }
 
 function buildControls(song){
     let s = this.state.song
-    s.song = song
+    s.song = song;
     this.setState({song: s});
     alert("Done");
     this.skipBack();
@@ -43,6 +43,7 @@ function tick(){
 
     if(!song.paused){
         this.updateTimer(song.currentSongTime, song.song.duration);
+        this.displayLyrics(song.currentSongTime);
         if (this.audio_context.currentTime > song.nextStepTime - song.stepDuration) {
 
             this.sendNotes(song.song, song.songStart, song.currentSongTime, song.currentSongTime + song.stepDuration, this.audio_context, this.input, this.player);
@@ -82,6 +83,7 @@ class Player extends React.Component {
             midiFileURL: "",
             download: null,
             mixer: null,
+            lyrics: [],
             song: {
                 name: "song",
                 song: null,
@@ -236,6 +238,16 @@ class Player extends React.Component {
         this.setState({durationTime: durationDate.toISOString().substr(14, 5)});
 
         this.setState({progress: (100 * currentTime / durationTime)});
+    }
+
+    displayLyrics = (currentTime) => {
+        for (const l of this.state.song.lyrics) {
+            if(currentTime.toFixed(1) == l.playTime/1000){
+                let chordId = l.text.replace(/\s/g, '');
+                let currentChord = document.getElementById(chordId);
+                currentChord.focus();
+            }
+        }
     }
 
     render(){
