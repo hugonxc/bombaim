@@ -247,8 +247,12 @@ class Player extends React.Component {
     }
 
     displayLyrics = (currentTime) => {
+        let cTime = parseFloat(currentTime.toFixed(2));
+        let dTime = cTime - 0.15;
+        let uTime = cTime + 0.15;
+
         for (const l of this.state.song.lyrics) {
-            if(currentTime.toFixed(1) == l.playTime/1000){
+            if((l.playTime/1000 == cTime) || ((l.playTime/1000 >= dTime) && (l.playTime/1000 <= uTime))){
                 let chordId = l.text.replace(/\s/g, '');
                 let currentChordDiv = document.getElementById("div-"+chordId);
                 currentChordDiv.focus();
