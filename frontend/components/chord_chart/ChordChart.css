@@ -73,6 +73,7 @@
 }
 
 .measure-div {
+    position: relative;
     margin: 0px 3px 0px 3px;
     width: 100%;
 }
@@ -86,10 +87,11 @@
     border: 0px !important;
 }
 .measure-div > div input {
-    background-color: transparent;
+    position: relative;
+    background-color: transparent !important;
     font-size: 3.7em;
     width: 100%;
-    height: 100%;
+    height: 95% !important;
     text-align: center;
     border: 0px !important;
 }
@@ -103,6 +105,42 @@
 .measure-div:hover {
     background-color: rgba(215, 221, 228, 0.93);
 }
+
+.measure-btn {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: #969FAA;
+    cursor: pointer;
+    width: 35px !important;
+    height: 30px !important;
+}
+
+#add-chord-btn {
+    position: absolute;
+    right: 0px;
+    z-index: 2 !important;
+}
+
+#remove-chord-btn {
+    position: absolute;
+    right: 45px;
+    z-index: 1;
+}
+
+#add-chord-btn:hover {
+    background-color: #328f7c !important;
+    color: white;
+}
+
+#remove-chord-btn:hover {
+    background-color: #f44336 !important;
+    color: white;
+}
+
+
+
+
+
 
 /* Chart controls */
 .chart-controls {

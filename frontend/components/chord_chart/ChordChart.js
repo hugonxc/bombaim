@@ -100,10 +100,17 @@ class ChordChart extends React.Component {
     }
 
     addMeasures = (event) => {
+        console.log("ADD", this.state.chart.measures);
         event.preventDefault();
         let chart = this.state.chart;
-        let len = Object.keys(chart.measures).length;
-        chart.measures[len+1] = [];
+        let measureKeys = Object.keys(chart.measures);
+        let next = measureKeys.length + 1;        
+        while(measureKeys.includes(next.toString())){
+            console.log("NNNN", next);
+            next = next+1
+        }
+        console.log("N", next);
+        chart.measures[next] = [];
         this.setState({chart: chart})
     }
 
@@ -113,6 +120,11 @@ class ChordChart extends React.Component {
         this.setState({chart: chart})
     }
 
+    deleteMeasure = (id) => {
+        let chart = this.state.chart;
+        delete chart.measures[id];
+        this.setState({chart: chart});
+    }
 
 
     render(){
@@ -145,7 +157,7 @@ class ChordChart extends React.Component {
                 >
                     {Object.keys(this.state.chart.measures).map((id, key) => (
                         <Grid item xs={3} key={"item"+id} className="measure">
-                            <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure}/>
+                            <Measure id={id} key={key} onChangeMeasure={this.onChangeMeasure} deleteMeasure={this.deleteMeasure}/>
                         </Grid>
 
                     ))}

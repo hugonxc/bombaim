@@ -55,6 +55,7 @@ export default function CustomAutocomplete(props) {
     let options = props.options;
     let id = props.id;
     let label = props.label;
+    let value = props.value;
 
     const filterOptions = createFilterOptions({
         ignoreCase: props.ignoreCase,
@@ -75,7 +76,7 @@ export default function CustomAutocomplete(props) {
             options={options}
             filterOptions={filterOptions}
             ListboxComponent={ListboxComponent}
-            groupBy={(option) => option.group}
+            groupBy={(option) => option.group}         
             getOptionLabel={(option) => option.value}
             onChange={onChange}
             renderGroup={renderGroup}
