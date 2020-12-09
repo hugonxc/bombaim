@@ -176,6 +176,11 @@
     font-weight: bold;
 }
 
+.tempo-popover-bpm {
+    font-size: 0.6em !important;
+    font-weight: bold;
+}
+
 .tempo-popover-slider {
     color: #328f7c !important;
 }

@@ -46,7 +46,10 @@ function TempoSelect(props){
                 <RiSubtractLine size="2em" onClick={decreaseTempo}/>
                 <Grid container className="tempo-popover-center" justify="center" alignItems="flex-start">
                     <GiMetronome size="2em" />
-                    <span className="tempo-popover-number">{tempo}</span>
+                    <span className="tempo-popover-number">
+                        {tempo}
+                        <span className="tempo-popover-bpm"> BPM</span>    
+                    </span>
                 </Grid>
                 <RiAddLine size="2em" onClick={increaseTempo} />
             </Grid>
