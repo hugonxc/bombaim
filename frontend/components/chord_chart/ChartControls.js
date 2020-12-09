@@ -3,11 +3,11 @@ import React, { useEffect } from "react"
 import { loading, sendAlert } from "../../components/utils/CustomAlert";
 
 // Material UI
-import { Drawer, Grid, Slider, Fab } from '@material-ui/core';
+import { Drawer, Grid, Slider, Fab, Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import CustomAutocomplete from "../utils/CustomAutocomplete";
 
 // Icons
-import { RiAddLine, RiSubtractLine, RiMusic2Line, RiCheckLine } from 'react-icons/ri';
+import { RiAddLine, RiSubtractLine, RiMusic2Line, RiCheckLine, RiUploadCloud2Line, RiFileUploadLine } from 'react-icons/ri';
 import { GiMetronome } from 'react-icons/gi';
 
 function TempoSelect(props){
@@ -59,6 +59,54 @@ function TempoSelect(props){
 }
 
 
+// Upload Groove Dialog
+function UploadGrooveDialog(props) {
+    const [open, setOpen] = React.useState(false);
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (value) => {
+      setOpen(false);
+    };
+
+    const grooveUpload = (event) => {
+        props.grooveUpload(event);
+    };
+
+    const grooveUploadClick = (event) => {
+        document.getElementById("upload-groove-input").click();
+    }
+  
+    return (
+      <div>
+        <label style={{cursor: "pointer"}} className="header-i" onClick={handleClickOpen}>
+            <RiUploadCloud2Line size="2.3em" />
+        </label>
+
+        <Dialog onClose={handleClose} aria-labelledby="upload-groove-dialog-title" open={open}>
+            <DialogTitle>Upload Groove</DialogTitle>
+            <DialogContent dividers className="upload-groove-content">
+                Upload your own groove respecting the .MMA format definition, after uploading you will see your new style
+                available on the styles list. For more information on how build it 
+
+                <a href="https://www.mellowood.ca/mma/online-docs/html/tut/node5.html"> click here.</a>
+
+                <Button variant="contained" id="upload-groove-btn" onClick={grooveUploadClick}>
+                    <RiFileUploadLine size="2em" color="black" id="upload-groove-btn-i"/>
+                    Upload your groove
+                    <input type="file" id="upload-groove-input" onChange={grooveUpload}/>
+                </Button>
+
+            </DialogContent>
+        </Dialog>
+      </div>
+    );
+}
+
+
+
 function GrooveSelect(props) {
     const [grooves, setGrooves] = React.useState([]);
 
@@ -102,6 +150,31 @@ function GrooveSelect(props) {
         }
     }
 
+    const fileUpload = (url, f) => {
+        const data = new FormData();
+        data.append('file', f)
+        
+        return fetch(url, {
+            mode: 'cors',
+            method: 'POST',
+            body: data
+        })
+    }
+
+    const grooveUpload = (event) => {
+        var url  = 'http://localhost:5000/groove';
+        var f = event.target.files[0];
+        var song = fileUpload(url, f);
+    
+        song.then(response => response.json())
+            .then(function(json){
+                alert("Groove: " + json['name'] + "\n" + 
+                      "Status: " + json['status']);
+                location.reload()
+            })
+    }
+
+
     useEffect(() => {
         getGrooves();
       }, []);
@@ -109,12 +182,15 @@ function GrooveSelect(props) {
       return(
         <Grid container justify="space-between" alignItems="center">
             <Grid item xs={2}><RiMusic2Line size="2em" id="groove-selector-i"/></Grid>
-            <Grid item xs={10}>
+            <Grid item xs={9}>
                 <CustomAutocomplete 
                     options={grooves}
                     onChange={updateGroove} 
                     id="groove-combo-box"
                     label="Select your style"/>
+            </Grid>
+            <Grid item xs={1}>
+                <UploadGrooveDialog grooveUpload={grooveUpload} />
             </Grid>
         </Grid>
       )
