@@ -1,6 +1,9 @@
 import os
 import json
+import tempfile
 from google.cloud import storage
+from flask import redirect
+from flask import Flask, flash, request, redirect, url_for, send_file, jsonify
 
 from mma.MMA import gbl
 from mma.MMA import auto
@@ -19,20 +22,45 @@ headers = {
 
 storage_client = storage.Client()
 
-def create_groove(request):
-    created = save_groove()
-    msg = "ERROR"
-    if created:
-        msg = "CREATED"
-    
-    return (msg, 200, headers)
+ALLOWED_EXTENSIONS = {'mma'}
 
-def save_groove():
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_file(request):
+    if request.method == 'POST':
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        f = request.files['file']
+        # If user does not select file, browser also
+        # submit an empty part without filename
+        if f.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if f and allowed_file(f.filename):
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".mma", delete=False) as upload_file:
+                upload_file.write(f.read().decode("utf-8"))
+            upload_file.close()
+
+            return upload_file, f.filename
+
+
+
+def create_groove(request):
+    f, filename = upload_file(request)
+    if f:
+        groove_info = save_groove(f, filename)
+        return (jsonify(**groove_info), 200, headers)
+
+def save_groove(f, filename):
     bucket = storage_client.get_bucket("mma-bombaim")
 
-    new_groove = bucket.blob("lib/bombaim/new_groove.mma")
+    new_groove = bucket.blob("lib/bombaim/"+ filename)
     
-    new_groove.upload_from_string("BETA TEST")
+    new_groove.upload_from_string(f.read())
 
     return True
 
