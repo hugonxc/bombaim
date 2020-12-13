@@ -46,6 +46,39 @@ def upload_file(request):
             return upload_file, f.filename
 
 
+def create_song(request):
+    # Read and copy files from mma /includes storage # 
+    storage_client = storage.Client()
+    mma_bucket = storage_client.get_bucket("mma-bombaim")
+    blobs = mma_bucket.list_blobs(prefix="includes")
+    
+    for blob in blobs:
+        filename = "/tmp/mma/"+str(blob.name)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        blob.download_to_filename(filename)
+
+    # Copy single groove
+    filename = "/tmp/mma/lib/bombaim/testgroove2.mma"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    b = mma_bucket.blob(filename)
+    b.download_to_filename(filename)
+
+    # Run MMA update groves list #
+    # Clear global variables and change MMAdir
+    gbl.__init__()
+    gbl.MMAdir = "/tmp/mma/"
+    # Set paths for the libs
+    paths.init()
+
+    gbl.makeGrvDefs = 2
+
+    try:
+        auto.libUpdate()
+    except SystemExit:
+        print("ignoring SystemExit", flush=True)
+
+    return ("SONG", 200, headers)
+
 
 def create_groove(request):
     f, filename = upload_file(request)
@@ -74,9 +107,8 @@ def remove_groove(event, context):
     update_grooves()
 
 def update_grooves():
-    storage_client = storage.Client()
-    
     # Read and copy files from mma storage #   
+    storage_client = storage.Client()
     mma_bucket = storage_client.get_bucket("mma-bombaim")
     blobs = mma_bucket.list_blobs()
     
