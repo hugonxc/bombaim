@@ -113,7 +113,7 @@ function GrooveSelect(props) {
     // Get available grooves
     const getGrooves = () => {
         loading(true);
-        var url  = 'http://localhost:5000/list_grooves';
+        var url  = 'https://storage.googleapis.com/grooves-bombaim/grooves/list_grooves.json';
 
         fetch(url, {
             mode: 'cors',
