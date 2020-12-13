@@ -162,7 +162,7 @@ function GrooveSelect(props) {
     }
 
     const grooveUpload = (event) => {
-        var url  = 'http://localhost:5000/groove';
+        var url  = 'https://us-central1-bombaim.cloudfunctions.net/create_groove';
         var f = event.target.files[0];
         var song = fileUpload(url, f);
     

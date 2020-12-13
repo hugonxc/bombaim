@@ -66,7 +66,14 @@ def save_groove(f, filename):
         "name": filename,
         "status": "available"
     }
-def update_grooves(event, context):
+
+def add_groove(event, context):
+    update_grooves()
+
+def remove_groove(event, context):
+    update_grooves()
+
+def update_grooves():
     # Read and copy files from mma storage #   
     mma_bucket = storage_client.get_bucket("mma-bombaim")
     blobs = mma_bucket.list_blobs()
