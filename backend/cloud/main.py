@@ -60,10 +60,12 @@ def save_groove(f, filename):
 
     new_groove = bucket.blob("lib/bombaim/"+ filename)
     
-    new_groove.upload_from_string(f.read())
+    new_groove.upload_from_string(open(f.name).read())
 
-    return True
-
+    return {
+        "name": filename,
+        "status": "available"
+    }
 def update_grooves(event, context):
     # Read and copy files from mma storage #   
     mma_bucket = storage_client.get_bucket("mma-bombaim")
