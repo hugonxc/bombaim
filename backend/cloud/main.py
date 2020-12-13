@@ -1,5 +1,17 @@
-improt json
+import os
+import json
 from google.cloud import storage
+
+from mma.MMA import gbl
+from mma.MMA import auto
+from mma.MMA import midi
+from mma.MMA import tempo
+from mma.MMA import parse
+from mma.MMA import paths
+from mma.MMA import grooves
+from mma.MMA import userGroove
+from mma.MMA.auto import loadDB
+
 
 headers = {
     'Access-Control-Allow-Origin': '*'
@@ -26,8 +38,8 @@ def save_groove():
 
 def update_grooves(event, context):
     # Read and copy files from mma storage #   
-    mma_bucket = client.get_bucket('mma-bombaim)
-    blobs = bucket.list_blobs()
+    mma_bucket = storage_client.get_bucket("mma-bombaim")
+    blobs = mma_bucket.list_blobs()
     
     for blob in blobs:
         filename = "/tmp/mma/"+str(blob.name)
@@ -68,6 +80,6 @@ def update_grooves(event, context):
     
     # Update file at storage #
     groove_bucket = storage_client.get_bucket("grooves-bombaim")
-    grooves = groove_bucket.blob('grooves/list_grooves.json')    
-    grooves.upload_from_string(json.dumps(grooves))    
-    grooves.make_public()
+    groove_blob = groove_bucket.blob('grooves/list_grooves.json')    
+    groove_blob.upload_from_string(json.dumps(grooves))    
+    groove_blob.make_public()
