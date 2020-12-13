@@ -2,8 +2,7 @@ import os
 import json
 import tempfile
 from google.cloud import storage
-from flask import redirect
-from flask import Flask, flash, request, redirect, url_for, send_file, jsonify
+from flask import flash, redirect, jsonify
 
 from mma.MMA import gbl
 from mma.MMA import auto
@@ -20,7 +19,6 @@ headers = {
     'Access-Control-Allow-Origin': '*'
 }
 
-storage_client = storage.Client()
 
 ALLOWED_EXTENSIONS = {'mma'}
 
@@ -56,6 +54,8 @@ def create_groove(request):
         return (jsonify(**groove_info), 200, headers)
 
 def save_groove(f, filename):
+    storage_client = storage.Client()
+
     bucket = storage_client.get_bucket("mma-bombaim")
 
     new_groove = bucket.blob("lib/bombaim/"+ filename)
@@ -74,6 +74,8 @@ def remove_groove(event, context):
     update_grooves()
 
 def update_grooves():
+    storage_client = storage.Client()
+    
     # Read and copy files from mma storage #   
     mma_bucket = storage_client.get_bucket("mma-bombaim")
     blobs = mma_bucket.list_blobs()
@@ -90,7 +92,7 @@ def update_grooves():
     # Set paths for the libs
     paths.init()
 
-    gbl.makeGrvDefs = 1
+    gbl.makeGrvDefs = 2
 
     try:
         auto.libUpdate()
