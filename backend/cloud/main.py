@@ -2,7 +2,7 @@ import os
 import json
 import tempfile
 from google.cloud import storage
-from flask import flash, redirect, jsonify
+from flask import flash, redirect, jsonify, send_file
 
 from mma.MMA import gbl
 from mma.MMA import auto
@@ -46,6 +46,58 @@ def upload_file(request):
             return upload_file, f.filename
 
 
+def generate_midi(filename):
+    # Clear global variables
+    gbl.__init__()
+    # Set paths for the libs
+    paths.init()
+    # Get the filename of the uploaded file
+    gbl.infile = filename
+    # Create first elements for midi file
+    m = gbl.mtrks[0] = midi.Mtrk(0)
+    m.addTrkName(0, "%s" % filename.rstrip(".mma"))
+    m.addText(0, "Created by mma.MMA. Input filename: %s" % filename)
+    m.addTempo(0, gbl.tempo)
+    tempo.setTime(['4/4'])
+    # Parse MMA file
+    paths.dommaStart()
+    try:
+        parse.parseFile(filename)
+    except SystemExit:
+        print("Error on parse", flush=True)
+        return None
+    paths.dommaEnd()
+    # Create the midi file
+    paths.createOutfileName(".mid")
+    out_filename = paths.outfile
+
+    for n in gbl.tnames.values():
+        if n.channel:
+            n.clearPending()
+            n.doMidiClear()
+            n.doChannelReset()
+            if n.riff:
+                warning("%s has pending Riff(s)" % n.name)
+
+    trackCount = 1    # account for meta track
+
+    for n in sorted(gbl.mtrks.keys())[1:]:     # check all but 0 (meta)
+        if len(gbl.mtrks[n].miditrk) > 1:
+            trackCount += 1
+
+    gbl.mtrks[0].addText(0, "DURATION: %d" % (gbl.totTime*60) )
+
+    try:
+        out = open(out_filename, 'wb')
+        midi.writeTracks(out)
+        out.close()
+    except IOError:
+        print("ERROR")
+
+    grooves.grooveClear([])
+
+    return out_filename
+
 def create_song(request):
     # Read and copy files from mma /includes storage # 
     storage_client = storage.Client()
@@ -58,10 +110,10 @@ def create_song(request):
         blob.download_to_filename(filename)
 
     # Copy single groove
-    filename = "/tmp/mma/lib/bombaim/testgroove2.mma"
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    filename = "lib/bombaim/testgroove2.mma"
+    os.makedirs(os.path.dirname("/tmp/mma/"+filename), exist_ok=True)
     b = mma_bucket.blob(filename)
-    b.download_to_filename(filename)
+    b.download_to_filename("/tmp/mma/"+filename)
 
     # Run MMA update groves list #
     # Clear global variables and change MMAdir
@@ -76,6 +128,44 @@ def create_song(request):
         auto.libUpdate()
     except SystemExit:
         print("ignoring SystemExit", flush=True)
+
+
+    # CREATE SONG
+    if request.is_json:
+        data = request.get_json()
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".mma", delete=False) as outfile:
+            outfile.write("// Name "+ data["name"] + "\n")
+            outfile.write("// Author "+ data["author"] + "\n")
+            outfile.write("Lyric On" + "\n") 
+            outfile.write("Tempo "+ data["tempo"] + "\n")
+            outfile.write("Groove "+ data["groove"])
+
+            # Unpack measures
+            for measure in data["measures"]:
+                outfile.write("\n" + str(measure) + " ")
+                chord_n = 1
+                chord_ids = "["
+                for chord in data["measures"][measure]:
+                    outfile.write(chord + " ")
+                    chord_id = "m"+str(measure)+"c"+str(chord_n)+" "
+                    chord_ids += chord_id 
+                    chord_n += 1
+                outfile.write(chord_ids+"]")
+        outfile.close()
+        
+        if outfile:
+            midi_filename = generate_midi(outfile.name)
+            if midi_filename:
+                return send_file(midi_filename, as_attachment=True)
+            else:
+                return {"error": "Something went wrong parse, please report this issue"}
+        return None
+
+
+
+
+
 
     return ("SONG", 200, headers)
 
