@@ -139,6 +139,19 @@ def create_song(request):
     print("JSON", request.is_json)
     print("G", request.get_json())
 
+    # Set CORS headers for preflight requests
+    if request.method == 'OPTIONS':
+        # Allows GET requests from origin https://mydomain.com with
+        # Authorization header
+        headers = {
+            'Access-Control-Allow-Origin': 'https://mydomain.com',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Authorization',
+            'Access-Control-Max-Age': '3600',
+            'Access-Control-Allow-Credentials': 'true'
+        }
+        return ('', 204, headers)
+
     # CREATE SONG
     if request.is_json:
         data = request.get_json()
