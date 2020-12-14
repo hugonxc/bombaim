@@ -1,2 +1,3 @@
 google-cloud-storage==1.33.0
 mma==1.5.20.2
+Flask-Cors==3.0.9

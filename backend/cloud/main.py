@@ -2,7 +2,8 @@ import os
 import json
 import tempfile
 from google.cloud import storage
-from flask import flash, redirect, jsonify, send_file
+from flask_cors import CORS
+from flask import Flask, flash, redirect, jsonify, send_file
 
 from mma.MMA import gbl
 from mma.MMA import auto
@@ -14,6 +15,10 @@ from mma.MMA import grooves
 from mma.MMA import userGroove
 from mma.MMA.auto import loadDB
 
+
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 headers = {
     'Access-Control-Allow-Origin': '*'
@@ -129,6 +134,10 @@ def create_song(request):
     except SystemExit:
         print("ignoring SystemExit", flush=True)
 
+
+    print("M", request.method)
+    print("JSON", request.is_json)
+    print("G", request.get_json())
 
     # CREATE SONG
     if request.is_json:
