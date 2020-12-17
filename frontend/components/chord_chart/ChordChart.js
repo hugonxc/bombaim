@@ -59,7 +59,7 @@ class ChordChart extends React.Component {
     sendChords = (event) => {
         event.preventDefault();
         loading(true);
-        var url  = 'http://localhost:5000/song';
+        var url  = "https://us-central1-bombaim.cloudfunctions.net/create_song";
 
         var data = JSON.stringify(this.state.chart);
         console.log("D", data);
@@ -68,7 +68,6 @@ class ChordChart extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            mode: 'cors',
             method: 'POST',
             body: data
         }).then(response => response.arrayBuffer())

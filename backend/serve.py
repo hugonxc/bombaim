@@ -127,6 +127,7 @@ def upload_groove():
 
 @app.route('/song', methods=['POST'])
 def song():
+    print("req", request.method, flush=True)
     if request.is_json:
         data = request.get_json()
 
