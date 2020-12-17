@@ -21,7 +21,7 @@ class App extends React.Component {
                     justify="flex-start"
                     alignItems="stretch"
                 >
-                    <div style={{position: "fixed", width: "100%"}}>
+                    <div style={{zIndex: 100000, position: "fixed", width: "100%"}}>
                         <Header />
                         <Player />
                     </div>
