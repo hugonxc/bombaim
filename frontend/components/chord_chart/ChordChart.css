@@ -7,7 +7,6 @@
     font-family: 'Montserrat', sans-serif !important;
     background-color: transparent !important;
     border: 0px;
-    text-align: center;
 }
 
 .chart input:focus{
@@ -76,6 +75,7 @@
     position: relative;
     margin: 0px 3px 0px 3px;
     width: 100%;
+    display: inline-flex;
 }
 
 .measure-div > div {
@@ -122,8 +122,7 @@
 }
 
 #remove-chord-btn {
-    position: absolute;
-    right: 45px;
+    position: relative;
     z-index: 1;
 }
 
@@ -137,8 +136,13 @@
     color: white;
 }
 
+.MuiAutocomplete-inputRoot {
+    padding-right: 5px !important;
+}
 
-
+.MuiAutocomplete-clearIndicator {
+    visibility: hidden !important;
+}
 
 
 
