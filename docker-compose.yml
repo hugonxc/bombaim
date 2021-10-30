@@ -11,7 +11,7 @@ services:
       FLASK_ENV: development
     volumes:
       - ./backend:/code
-      - notused:/code/songs
+      - /code/songs
     ports:
       - 5000:5000
 
@@ -25,11 +25,7 @@ services:
       - ./frontend:/code/app:delegated
       - ./frontend/package.json:/code/package.json
       - ./frontend/package-lock.json:/code/package-lock.json
-      - notused:/code/app/node_modules
+      - /code/app/node_modules
     ports:
       - 1234:1234
       - 2345:2345
-
-
-volumes:
-  notused:
